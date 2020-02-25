@@ -18,5 +18,9 @@ pipeline = PMMLPipeline([
 ])
 
 pipeline.fit(X, y)
+
 pipeline.configure(compact = False)
-sklearn2pmml(pipeline, "SampleClassifier.pmml", with_repr = True)
+sklearn2pmml(pipeline, "Classifier.pmml", with_repr = True)
+
+pipeline.configure(compact = True)
+sklearn2pmml(pipeline, "CompactClassifier.pmml", with_repr = True)
