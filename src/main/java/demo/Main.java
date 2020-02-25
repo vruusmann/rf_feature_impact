@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -100,6 +101,8 @@ public class Main {
 
 		String indent = "";
 
+		DecimalFormat probabilityFormat = new DecimalFormat("0.000");
+
 		List<Node> nodes = hasDecisionPath.getDecisionPath();
 		for(Node node : nodes){
 			System.out.println(indent + node);
@@ -116,8 +119,19 @@ public class Main {
 
 			if(node.hasScoreDistributions()){
 				List<ScoreDistribution> scoreDistributions = node.getScoreDistributions();
+
+				double sumOfRecordCounts = 0d;
+
 				for(ScoreDistribution scoreDistribution : scoreDistributions){
-					System.out.println(indent + scoreDistribution.getValue() + " -> " + scoreDistribution.getRecordCount());
+					Number recordCount = scoreDistribution.getRecordCount();
+
+					sumOfRecordCounts += recordCount.doubleValue();
+				}
+
+				for(ScoreDistribution scoreDistribution : scoreDistributions){
+					Number recordCount = scoreDistribution.getRecordCount();
+
+					System.out.println(indent + scoreDistribution.getValue() + " -> " + recordCount + ", p=" + probabilityFormat.format(recordCount.doubleValue() / sumOfRecordCounts));
 				}
 			}
 
