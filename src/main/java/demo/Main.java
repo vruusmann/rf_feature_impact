@@ -13,13 +13,17 @@ import org.dmg.pmml.FieldName;
 import org.dmg.pmml.Predicate;
 import org.dmg.pmml.ScoreDistribution;
 import org.dmg.pmml.SimplePredicate;
+import org.dmg.pmml.adapters.NodeAdapter;
+import org.dmg.pmml.tree.ComplexNode;
 import org.dmg.pmml.tree.Node;
+import org.dmg.pmml.tree.NodeTransformer;
 import org.jpmml.evaluator.Evaluator;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
 import org.jpmml.evaluator.mining.HasSegmentation;
 import org.jpmml.evaluator.mining.SegmentResult;
 import org.jpmml.evaluator.tree.HasDecisionPath;
 import org.jpmml.evaluator.visitors.DefaultVisitorBattery;
+import org.jpmml.model.VisitorBattery;
 
 public class Main {
 
@@ -28,12 +32,33 @@ public class Main {
 		File pmmlFile = new File(args[0]);
 		File csvFile = new File(args[1]);
 
+		NodeTransformer nodeTransformer = new NodeTransformer(){
+
+			@Override
+			public Node fromComplexNode(ComplexNode complexNode){
+				return complexNode;
+			}
+
+			@Override
+			public ComplexNode toComplexNode(Node node){
+				return (ComplexNode)node;
+			}
+		};
+
+		NodeAdapter.NODE_TRANSFORMER_PROVIDER.set(nodeTransformer);
+
+		VisitorBattery visitors = new VisitorBattery();
+		visitors.add(ScoreDistributionGenerator.class);
+		visitors.addAll(new DefaultVisitorBattery());
+
 		Evaluator evaluator = new LoadingModelEvaluatorBuilder()
 			.setLocatable(false)
-			.setVisitors(new DefaultVisitorBattery())
+			.setVisitors(visitors)
 			//.setOutputFilter(OutputFilters.KEEP_FINAL_RESULTS)
 			.load(pmmlFile)
 			.build();
+
+		NodeAdapter.NODE_TRANSFORMER_PROVIDER.remove();
 
 		// Perforing the self-check
 		evaluator.verify();
