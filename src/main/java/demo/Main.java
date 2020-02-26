@@ -60,21 +60,22 @@ public class Main {
 			Collection<? extends SegmentResult> segmentResults = hasSegmentation.getSegmentResults();
 			for(SegmentResult segmentResult : segmentResults){
 				Object segmentTargetValue = segmentResult.getTargetValue();
+				Number segmentWeight = segmentResult.getWeight();
 
-				printDecisionPath(segmentTargetValue);
+				printDecisionPath(segmentTargetValue, segmentWeight);
 			}
 		} else
 
 		// Not an ensemble model.
 		// For example, a standalone decision tree model.
 		{
-			printDecisionPath(targetValue);
+			printDecisionPath(targetValue, 1.0d);
 		}
 	}
 
 	static
-	private void printDecisionPath(Object targetValue){
-		System.out.println(targetValue);
+	private void printDecisionPath(Object targetValue, Number weight){
+		System.out.println(targetValue + " (weight " + weight + ")");
 
 		HasDecisionPath hasDecisionPath = (HasDecisionPath)targetValue;
 
