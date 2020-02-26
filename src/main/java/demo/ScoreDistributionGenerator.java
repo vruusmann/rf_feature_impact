@@ -66,14 +66,20 @@ public class ScoreDistributionGenerator extends AbstractVisitor {
 				.flatMap(x -> x.stream())
 				.collect(Collectors.groupingBy(ScoreDistribution::getValue, Collectors.mapping(ScoreDistribution::getRecordCount, Collectors.toList())));
 
+			double sumOfRecordCounts = 0d;
+
 			Collection<Map.Entry<Object, List<Number>>> entries = valueRecordCounts.entrySet();
 			for(Map.Entry<Object, List<Number>> entry : entries){
 				Object value = entry.getKey();
 				Double recordCount = entry.getValue().stream()
 					.collect(Collectors.summingDouble(Number::doubleValue));
 
+				sumOfRecordCounts += recordCount;
+
 				node.addScoreDistributions(new ScoreDistribution(value, recordCount));
 			}
+
+			node.setRecordCount(sumOfRecordCounts);
 		}
 	}
 }

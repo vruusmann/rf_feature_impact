@@ -102,20 +102,13 @@ public class Main {
 			}
 
 			if(node.hasScoreDistributions()){
+				Number sumOfRecordCounts = node.getRecordCount();
 				List<ScoreDistribution> scoreDistributions = node.getScoreDistributions();
 
-				double sumOfRecordCounts = 0d;
-
 				for(ScoreDistribution scoreDistribution : scoreDistributions){
 					Number recordCount = scoreDistribution.getRecordCount();
 
-					sumOfRecordCounts += recordCount.doubleValue();
-				}
-
-				for(ScoreDistribution scoreDistribution : scoreDistributions){
-					Number recordCount = scoreDistribution.getRecordCount();
-
-					System.out.println(indent + scoreDistribution.getValue() + " -> " + recordCount + ", p=" + probabilityFormat.format(recordCount.doubleValue() / sumOfRecordCounts));
+					System.out.println(indent + scoreDistribution.getValue() + " -> " + recordCount + ", p=" + probabilityFormat.format(recordCount.doubleValue() / sumOfRecordCounts.doubleValue()));
 				}
 			}
 
