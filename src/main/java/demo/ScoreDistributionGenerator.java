@@ -1,9 +1,9 @@
 package demo;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.dmg.pmml.MiningFunction;
 import org.dmg.pmml.PMMLObject;
@@ -27,11 +27,20 @@ public class ScoreDistributionGenerator extends AbstractVisitor {
 		return super.visit(treeModel);
 	}
 
+	/**
+	 * Going down the tree data structure.
+	 */
 	@Override
 	public void pushParent(PMMLObject parent){
 		super.pushParent(parent);
 	}
 
+	/**
+	 * Coming up from the tree data structure.
+	 * In this point, it is guaranteed that all the child nodes have proper ScoreDistribution child elements.
+	 * The record count for the current node (ie. the one that is being "popped")
+	 * is computed by summing the record counts of its child nodes.
+	 */
 	@Override
 	public PMMLObject popParent(){
 		PMMLObject parent = super.popParent();
@@ -52,31 +61,18 @@ public class ScoreDistributionGenerator extends AbstractVisitor {
 		} // End if
 
 		if(node.hasNodes()){
-			Map<Object, Number> recordCounts = new LinkedHashMap<>();
+			Map<Object, List<Number>> valueRecordCounts = node.getNodes().stream()
+				.map(Node::getScoreDistributions)
+				.flatMap(x -> x.stream())
+				.collect(Collectors.groupingBy(ScoreDistribution::getValue, Collectors.mapping(ScoreDistribution::getRecordCount, Collectors.toList())));
 
-			List<Node> children = node.getNodes();
-			for(Node child : children){
-				List<ScoreDistribution> scoreDistributions = child.getScoreDistributions();
-				for(ScoreDistribution scoreDistribution : scoreDistributions){
-					Object childValue = scoreDistribution.getValue();
-					Number childRecordCount = scoreDistribution.getRecordCount();
+			Collection<Map.Entry<Object, List<Number>>> entries = valueRecordCounts.entrySet();
+			for(Map.Entry<Object, List<Number>> entry : entries){
+				Object value = entry.getKey();
+				Double recordCount = entry.getValue().stream()
+					.collect(Collectors.summingDouble(Number::doubleValue));
 
-					Number recordCount = recordCounts.get(childValue);
-					if(recordCount == null){
-						recordCount = childRecordCount;
-					} else
-
-					{
-						recordCount = recordCount.doubleValue() + childRecordCount.doubleValue();
-					}
-
-					recordCounts.put(childValue, recordCount);
-				}
-			}
-
-			Collection<Map.Entry<Object, Number>> entries = recordCounts.entrySet();
-			for(Map.Entry<Object, Number> entry : entries){
-				node.addScoreDistributions(new ScoreDistribution(entry.getKey(), entry.getValue()));
+				node.addScoreDistributions(new ScoreDistribution(value, recordCount));
 			}
 		}
 	}
