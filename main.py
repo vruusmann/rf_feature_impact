@@ -10,8 +10,7 @@ X = pd.DataFrame(data=a['data'], columns=a['feature_names'])
 y = a['target']
 SEED = 30
 
-demo_X = X.head(1)
-demo_X.to_csv("demo_X.csv", index = False)
+X.to_csv("wine.csv", index = False)
 
 pipeline = PMMLPipeline([
   ('classifier', RandomForestClassifier(n_estimators=3, max_depth=4, random_state=SEED))
