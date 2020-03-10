@@ -22,17 +22,17 @@ The project should be now visible as `rf_feature_impact` under "Project explorer
 
 # Usage #
 
-Run Python script:
+The resources folder `src/main/resources` contains two random forest examples.
+
+Scoring the classification example:
 
 ```
-$ python main.py
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestClassifier.pmml src/main/resources/csv/Audit.csv 0
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestClassifier.pmml src/main/resources/csv/Audit.csv 1
 ```
 
-The training session produces two PMML files `Classifier.pmml` and `CompactClassifier.pmml`, and a CSV file `wine.csv`.
-
-Score PMML files with the CSV file:
+Scoring the regression example:
 
 ```
-$ java -jar target/demo-executable-1.0-SNAPSHOT.jar Classifier.pmml wine.csv <target class>
-$ java -jar target/demo-executable-1.0-SNAPSHOT.jar CompactClassifier.pmml wine.csv <target class>
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestRegressor.pmml src/main/resources/csv/Auto.csv
 ```

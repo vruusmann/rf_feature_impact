@@ -1,0 +1,1663 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_3" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+	<Header>
+		<Application name="JPMML-SkLearn" version="1.5.32"/>
+		<Timestamp>2020-03-10T21:03:38Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="Adjusted" optype="categorical" dataType="integer">
+			<Value value="0"/>
+			<Value value="1"/>
+		</DataField>
+		<DataField name="Employment" optype="categorical" dataType="string">
+			<Value value="Consultant"/>
+			<Value value="PSFederal"/>
+			<Value value="PSLocal"/>
+			<Value value="PSState"/>
+			<Value value="Private"/>
+			<Value value="SelfEmp"/>
+			<Value value="Volunteer"/>
+		</DataField>
+		<DataField name="Education" optype="categorical" dataType="string">
+			<Value value="Associate"/>
+			<Value value="Bachelor"/>
+			<Value value="College"/>
+			<Value value="Doctorate"/>
+			<Value value="HSgrad"/>
+			<Value value="Master"/>
+			<Value value="Preschool"/>
+			<Value value="Professional"/>
+			<Value value="Vocational"/>
+			<Value value="Yr10"/>
+			<Value value="Yr11"/>
+			<Value value="Yr12"/>
+			<Value value="Yr1t4"/>
+			<Value value="Yr5t6"/>
+			<Value value="Yr7t8"/>
+			<Value value="Yr9"/>
+		</DataField>
+		<DataField name="Marital" optype="categorical" dataType="string">
+			<Value value="Absent"/>
+			<Value value="Divorced"/>
+			<Value value="Married"/>
+			<Value value="Married-spouse-absent"/>
+			<Value value="Unmarried"/>
+			<Value value="Widowed"/>
+		</DataField>
+		<DataField name="Occupation" optype="categorical" dataType="string">
+			<Value value="Cleaner"/>
+			<Value value="Clerical"/>
+			<Value value="Executive"/>
+			<Value value="Farming"/>
+			<Value value="Home"/>
+			<Value value="Machinist"/>
+			<Value value="Military"/>
+			<Value value="Professional"/>
+			<Value value="Protective"/>
+			<Value value="Repair"/>
+			<Value value="Sales"/>
+			<Value value="Service"/>
+			<Value value="Support"/>
+			<Value value="Transport"/>
+		</DataField>
+		<DataField name="Gender" optype="categorical" dataType="string">
+			<Value value="Female"/>
+			<Value value="Male"/>
+		</DataField>
+		<DataField name="Age" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="17" rightMargin="83"/>
+		</DataField>
+		<DataField name="Income" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="609.72" rightMargin="481259.5"/>
+		</DataField>
+		<DataField name="Hours" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="1" rightMargin="99"/>
+		</DataField>
+	</DataDictionary>
+	<TransformationDictionary/>
+	<MiningModel functionName="classification">
+		<MiningSchema>
+			<MiningField name="Adjusted" usageType="target"/>
+			<MiningField name="Employment" missingValueTreatment="asIs"/>
+			<MiningField name="Education" missingValueTreatment="asIs"/>
+			<MiningField name="Marital" missingValueTreatment="asIs"/>
+			<MiningField name="Occupation" missingValueTreatment="asIs"/>
+			<MiningField name="Gender" missingValueTreatment="asIs"/>
+			<MiningField name="Income" missingValueTreatment="asIs"/>
+			<MiningField name="Age" missingValueTreatment="asIs"/>
+			<MiningField name="Hours" missingValueTreatment="asIs"/>
+		</MiningSchema>
+		<Output>
+			<OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
+			<OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
+		</Output>
+		<ModelStats>
+			<UnivariateStats field="Employment">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">Consultant PSFederal PSLocal PSState Private SelfEmp Volunteer</Array>
+					<Array type="int">148 69 119 72 1411 79 1</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="Education">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">Associate Bachelor College Doctorate HSgrad Master Preschool Professional Vocational Yr10 Yr11 Yr12 Yr1t4 Yr5t6 Yr7t8 Yr9</Array>
+					<Array type="int">67 332 418 24 633 98 6 23 81 54 65 15 5 21 32 25</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="Marital">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">Absent Divorced Married Married-spouse-absent Unmarried Widowed</Array>
+					<Array type="int">633 256 878 21 64 47</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="Occupation">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">Cleaner Clerical Executive Farming Home Machinist Military Professional Protective Repair Sales Service Support Transport</Array>
+					<Array type="int">91 232 289 58 5 139 1 247 40 225 206 210 49 107</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="Gender">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">Female Male</Array>
+					<Array type="int">592 1307</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="Income">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="609.72" maximum="481259.5" mean="84404.87069510268" standardDeviation="69670.62788525566" median="59534.87" interQuartileRange="79343.92"/>
+			</UnivariateStats>
+			<UnivariateStats field="Age">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="17" maximum="83" mean="38.30279094260137" standardDeviation="13.010323102003973" median="37.0" interQuartileRange="19.0"/>
+			</UnivariateStats>
+			<UnivariateStats field="Hours">
+				<Counts totalFreq="1899" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="1" maximum="99" mean="40.56714060031596" standardDeviation="11.656262333704255" median="40.0" interQuartileRange="5.0"/>
+			</UnivariateStats>
+		</ModelStats>
+		<LocalTransformations>
+			<DerivedField name="float(Age)" optype="continuous" dataType="float">
+				<FieldRef field="Age"/>
+			</DerivedField>
+			<DerivedField name="float(Income)" optype="continuous" dataType="float">
+				<FieldRef field="Income"/>
+			</DerivedField>
+			<DerivedField name="float(Hours)" optype="continuous" dataType="float">
+				<FieldRef field="Hours"/>
+			</DerivedField>
+			<DerivedField name="double(float(Income))" optype="continuous" dataType="double">
+				<FieldRef field="float(Income)"/>
+			</DerivedField>
+			<DerivedField name="double(float(Age))" optype="continuous" dataType="double">
+				<FieldRef field="float(Age)"/>
+			</DerivedField>
+			<DerivedField name="double(float(Hours))" optype="continuous" dataType="double">
+				<FieldRef field="float(Hours)"/>
+			</DerivedField>
+		</LocalTransformations>
+		<Segmentation multipleModelMethod="average">
+			<Segment id="1">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="Education" operator="notEqual" value="Doctorate"/>
+							<Node>
+								<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="51111.455078125"/>
+										<Node score="0" recordCount="223.0">
+											<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="39.5"/>
+											<ScoreDistribution value="0" recordCount="174.0"/>
+											<ScoreDistribution value="1" recordCount="49.0"/>
+										</Node>
+										<Node score="0" recordCount="390.0">
+											<SimplePredicate field="double(float(Age))" operator="greaterThan" value="39.5"/>
+											<ScoreDistribution value="0" recordCount="215.0"/>
+											<ScoreDistribution value="1" recordCount="175.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="greaterThan" value="51111.455078125"/>
+										<Node score="0" recordCount="434.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="352.0"/>
+											<ScoreDistribution value="1" recordCount="82.0"/>
+										</Node>
+										<Node score="0" recordCount="16.0">
+											<SimplePredicate field="Education" operator="equal" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="16.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Professional"/>
+										<Node score="0" recordCount="455.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Repair"/>
+											<ScoreDistribution value="0" recordCount="451.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="0" recordCount="40.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Repair"/>
+											<ScoreDistribution value="0" recordCount="36.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="Professional"/>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="52.5"/>
+											<ScoreDistribution value="0" recordCount="7.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="1" recordCount="5.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="52.5"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="5.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+								<Node>
+									<SimplePredicate field="Occupation" operator="notEqual" value="Support"/>
+									<Node>
+										<SimplePredicate field="Employment" operator="notEqual" value="PSFederal"/>
+										<Node score="0" recordCount="58.0">
+											<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="29.5"/>
+											<ScoreDistribution value="0" recordCount="52.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="1" recordCount="210.0">
+											<SimplePredicate field="double(float(Age))" operator="greaterThan" value="29.5"/>
+											<ScoreDistribution value="0" recordCount="97.0"/>
+											<ScoreDistribution value="1" recordCount="113.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Employment" operator="equal" value="PSFederal"/>
+										<Node score="0" recordCount="11.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="60029.4296875"/>
+											<ScoreDistribution value="0" recordCount="11.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="60029.4296875"/>
+											<ScoreDistribution value="0" recordCount="7.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Occupation" operator="equal" value="Support"/>
+									<Node>
+										<SimplePredicate field="Gender" operator="notEqual" value="Male"/>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="3.0">
+											<SimplePredicate field="Marital" operator="equal" value="Married"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="8.0">
+										<SimplePredicate field="Gender" operator="equal" value="Male"/>
+										<ScoreDistribution value="0" recordCount="8.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="Education" operator="equal" value="Doctorate"/>
+							<Node>
+								<SimplePredicate field="Employment" operator="notEqual" value="PSLocal"/>
+								<Node>
+									<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="73236.49609375"/>
+									<Node>
+										<SimplePredicate field="Employment" operator="notEqual" value="PSFederal"/>
+										<Node score="1" recordCount="5.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="42.5"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+										<Node score="1" recordCount="10.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="42.5"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="10.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="3.0">
+										<SimplePredicate field="Employment" operator="equal" value="PSFederal"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="3.0"/>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="double(float(Income))" operator="greaterThan" value="73236.49609375"/>
+									<Node>
+										<SimplePredicate field="Marital" operator="notEqual" value="Widowed"/>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="87586.67578125"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="87586.67578125"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="1.0">
+										<SimplePredicate field="Marital" operator="equal" value="Widowed"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="1.0"/>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Employment" operator="equal" value="PSLocal"/>
+								<Node score="0" recordCount="3.0">
+									<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+									<ScoreDistribution value="0" recordCount="3.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+								<Node score="1" recordCount="2.0">
+									<SimplePredicate field="Marital" operator="equal" value="Married"/>
+									<ScoreDistribution value="0" recordCount="0.0"/>
+									<ScoreDistribution value="1" recordCount="2.0"/>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="2">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+							<Node>
+								<SimplePredicate field="Gender" operator="notEqual" value="Male"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Associate"/>
+									<Node>
+										<SimplePredicate field="Employment" operator="notEqual" value="Consultant"/>
+										<Node score="0" recordCount="246.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="213.0"/>
+											<ScoreDistribution value="1" recordCount="33.0"/>
+										</Node>
+										<Node score="0" recordCount="209.0">
+											<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="205.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Employment" operator="equal" value="Consultant"/>
+										<Node score="0" recordCount="7.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Cleaner"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+										<Node score="0" recordCount="3.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Cleaner"/>
+											<ScoreDistribution value="0" recordCount="3.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Education" operator="equal" value="Associate"/>
+									<Node>
+										<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+										<Node score="1" recordCount="6.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="0" recordCount="3.0">
+											<SimplePredicate field="Employment" operator="equal" value="Private"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+										<Node score="0" recordCount="5.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Clerical"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="5.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Clerical"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Gender" operator="equal" value="Male"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Professional"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+										<Node score="0" recordCount="226.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+											<ScoreDistribution value="0" recordCount="163.0"/>
+											<ScoreDistribution value="1" recordCount="63.0"/>
+										</Node>
+										<Node score="0" recordCount="703.0">
+											<SimplePredicate field="Employment" operator="equal" value="Private"/>
+											<ScoreDistribution value="0" recordCount="595.0"/>
+											<ScoreDistribution value="1" recordCount="108.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+										<Node score="0" recordCount="39.0">
+											<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="38.5"/>
+											<ScoreDistribution value="0" recordCount="33.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="1" recordCount="98.0">
+											<SimplePredicate field="double(float(Age))" operator="greaterThan" value="38.5"/>
+											<ScoreDistribution value="0" recordCount="38.0"/>
+											<ScoreDistribution value="1" recordCount="60.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node score="1" recordCount="15.0">
+									<SimplePredicate field="Education" operator="equal" value="Professional"/>
+									<ScoreDistribution value="0" recordCount="0.0"/>
+									<ScoreDistribution value="1" recordCount="15.0"/>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+							<Node>
+								<SimplePredicate field="Employment" operator="notEqual" value="PSState"/>
+								<Node>
+									<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="31.5"/>
+									<Node>
+										<SimplePredicate field="Marital" operator="notEqual" value="Unmarried"/>
+										<Node score="0" recordCount="79.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="75.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="1" recordCount="3.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="1.0">
+										<SimplePredicate field="Marital" operator="equal" value="Unmarried"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="1.0"/>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="double(float(Age))" operator="greaterThan" value="31.5"/>
+									<Node>
+										<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+										<Node score="0" recordCount="64.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Sales"/>
+											<ScoreDistribution value="0" recordCount="52.0"/>
+											<ScoreDistribution value="1" recordCount="12.0"/>
+										</Node>
+										<Node score="1" recordCount="11.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Sales"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="1" recordCount="120.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="46.0"/>
+											<ScoreDistribution value="1" recordCount="74.0"/>
+										</Node>
+										<Node score="1" recordCount="41.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="9.0"/>
+											<ScoreDistribution value="1" recordCount="32.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Employment" operator="equal" value="PSState"/>
+								<Node score="0" recordCount="1.0">
+									<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+									<ScoreDistribution value="0" recordCount="1.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+								<Node>
+									<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="47.5"/>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="45488.599609375"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="12.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="45488.599609375"/>
+											<ScoreDistribution value="0" recordCount="12.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="1.0">
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="47.5"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="1.0"/>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="3">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="30.5"/>
+							<Node>
+								<SimplePredicate field="Occupation" operator="notEqual" value="Cleaner"/>
+								<Node>
+									<SimplePredicate field="Occupation" operator="notEqual" value="Service"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="41.0"/>
+										<Node score="0" recordCount="223.0">
+											<SimplePredicate field="Education" operator="notEqual" value="HSgrad"/>
+											<ScoreDistribution value="0" recordCount="211.0"/>
+											<ScoreDistribution value="1" recordCount="12.0"/>
+										</Node>
+										<Node score="0" recordCount="112.0">
+											<SimplePredicate field="Education" operator="equal" value="HSgrad"/>
+											<ScoreDistribution value="0" recordCount="109.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="41.0"/>
+										<Node score="0" recordCount="101.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="83.0"/>
+											<ScoreDistribution value="1" recordCount="18.0"/>
+										</Node>
+										<Node score="1" recordCount="2.0">
+											<SimplePredicate field="Education" operator="equal" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node score="0" recordCount="88.0">
+									<SimplePredicate field="Occupation" operator="equal" value="Service"/>
+									<ScoreDistribution value="0" recordCount="88.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Occupation" operator="equal" value="Cleaner"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Yr12"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="70.0"/>
+										<Node score="0" recordCount="28.0">
+											<SimplePredicate field="Education" operator="notEqual" value="HSgrad"/>
+											<ScoreDistribution value="0" recordCount="27.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="20.0">
+											<SimplePredicate field="Education" operator="equal" value="HSgrad"/>
+											<ScoreDistribution value="0" recordCount="20.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="1.0">
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="70.0"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="1.0"/>
+									</Node>
+								</Node>
+								<Node score="0" recordCount="2.0">
+									<SimplePredicate field="Education" operator="equal" value="Yr12"/>
+									<ScoreDistribution value="0" recordCount="2.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="double(float(Age))" operator="greaterThan" value="30.5"/>
+							<Node>
+								<SimplePredicate field="Occupation" operator="notEqual" value="Service"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Master"/>
+										<Node score="0" recordCount="744.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="456.0"/>
+											<ScoreDistribution value="1" recordCount="288.0"/>
+										</Node>
+										<Node score="0" recordCount="141.0">
+											<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="120.0"/>
+											<ScoreDistribution value="1" recordCount="21.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="Master"/>
+										<Node score="0" recordCount="14.0">
+											<SimplePredicate field="Gender" operator="notEqual" value="Male"/>
+											<ScoreDistribution value="0" recordCount="12.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+										<Node score="1" recordCount="72.0">
+											<SimplePredicate field="Gender" operator="equal" value="Male"/>
+											<ScoreDistribution value="0" recordCount="9.0"/>
+											<ScoreDistribution value="1" recordCount="63.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+										<Node score="0" recordCount="153.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="49.0"/>
+											<ScoreDistribution value="0" recordCount="139.0"/>
+											<ScoreDistribution value="1" recordCount="14.0"/>
+										</Node>
+										<Node score="0" recordCount="48.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="49.0"/>
+											<ScoreDistribution value="0" recordCount="32.0"/>
+											<ScoreDistribution value="1" recordCount="16.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+										<Node score="1" recordCount="7.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="PSState"/>
+											<ScoreDistribution value="0" recordCount="3.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="Employment" operator="equal" value="PSState"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Occupation" operator="equal" value="Service"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Yr11"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="HSgrad"/>
+										<Node score="0" recordCount="62.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="60.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+										<Node score="0" recordCount="5.0">
+											<SimplePredicate field="Education" operator="equal" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="HSgrad"/>
+										<Node score="0" recordCount="46.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="45.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="19.0">
+											<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="19.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Education" operator="equal" value="Yr11"/>
+									<Node score="0" recordCount="4.0">
+										<SimplePredicate field="Gender" operator="notEqual" value="Female"/>
+										<ScoreDistribution value="0" recordCount="4.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="Gender" operator="equal" value="Female"/>
+										<Node score="0" recordCount="4.0">
+											<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="51.0"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="double(float(Age))" operator="greaterThan" value="51.0"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="4">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="Occupation" operator="notEqual" value="Professional"/>
+							<Node>
+								<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="37.5"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Associate"/>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="40.5"/>
+										<Node score="0" recordCount="257.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+											<ScoreDistribution value="0" recordCount="257.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="23.0">
+											<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+											<ScoreDistribution value="0" recordCount="22.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="greaterThan" value="40.5"/>
+										<Node score="0" recordCount="81.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Service"/>
+											<ScoreDistribution value="0" recordCount="68.0"/>
+											<ScoreDistribution value="1" recordCount="13.0"/>
+										</Node>
+										<Node score="0" recordCount="16.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Service"/>
+											<ScoreDistribution value="0" recordCount="16.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Education" operator="equal" value="Associate"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+										<Node score="0" recordCount="13.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="320075.3515625"/>
+											<ScoreDistribution value="0" recordCount="13.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="3.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="320075.3515625"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="1.0">
+										<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+										<ScoreDistribution value="0" recordCount="1.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="37.5"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="69216.56640625"/>
+										<Node score="0" recordCount="713.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Master"/>
+											<ScoreDistribution value="0" recordCount="459.0"/>
+											<ScoreDistribution value="1" recordCount="254.0"/>
+										</Node>
+										<Node score="1" recordCount="23.0">
+											<SimplePredicate field="Education" operator="equal" value="Master"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="22.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="greaterThan" value="69216.56640625"/>
+										<Node score="0" recordCount="297.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+											<ScoreDistribution value="0" recordCount="284.0"/>
+											<ScoreDistribution value="1" recordCount="13.0"/>
+										</Node>
+										<Node score="0" recordCount="48.0">
+											<SimplePredicate field="Marital" operator="equal" value="Married"/>
+											<ScoreDistribution value="0" recordCount="24.0"/>
+											<ScoreDistribution value="1" recordCount="24.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+									<Node score="0" recordCount="106.0">
+										<SimplePredicate field="Gender" operator="notEqual" value="Male"/>
+										<ScoreDistribution value="0" recordCount="106.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="Gender" operator="equal" value="Male"/>
+										<Node score="0" recordCount="73.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Sales"/>
+											<ScoreDistribution value="0" recordCount="67.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="0" recordCount="5.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Sales"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="Occupation" operator="equal" value="Professional"/>
+							<Node>
+								<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Doctorate"/>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="96812.1796875"/>
+										<Node score="0" recordCount="73.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="PSState"/>
+											<ScoreDistribution value="0" recordCount="57.0"/>
+											<ScoreDistribution value="1" recordCount="16.0"/>
+										</Node>
+										<Node score="0" recordCount="11.0">
+											<SimplePredicate field="Employment" operator="equal" value="PSState"/>
+											<ScoreDistribution value="0" recordCount="11.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="greaterThan" value="96812.1796875"/>
+										<Node score="0" recordCount="30.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+											<ScoreDistribution value="0" recordCount="30.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="25.0">
+											<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+											<ScoreDistribution value="0" recordCount="23.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node score="1" recordCount="5.0">
+									<SimplePredicate field="Education" operator="equal" value="Doctorate"/>
+									<ScoreDistribution value="0" recordCount="0.0"/>
+									<ScoreDistribution value="1" recordCount="5.0"/>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Marital" operator="equal" value="Married"/>
+								<Node>
+									<SimplePredicate field="Employment" operator="notEqual" value="PSLocal"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="22.5"/>
+										<Node score="0" recordCount="6.0">
+											<SimplePredicate field="Education" operator="notEqual" value="College"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="Education" operator="equal" value="College"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="22.5"/>
+										<Node score="1" recordCount="74.0">
+											<SimplePredicate field="Gender" operator="notEqual" value="Female"/>
+											<ScoreDistribution value="0" recordCount="20.0"/>
+											<ScoreDistribution value="1" recordCount="54.0"/>
+										</Node>
+										<Node score="1" recordCount="6.0">
+											<SimplePredicate field="Gender" operator="equal" value="Female"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="5.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node score="0" recordCount="8.0">
+									<SimplePredicate field="Employment" operator="equal" value="PSLocal"/>
+									<ScoreDistribution value="0" recordCount="8.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="5">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="49.0"/>
+							<Node>
+								<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+								<Node>
+									<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+									<Node>
+										<SimplePredicate field="Gender" operator="notEqual" value="Male"/>
+										<Node score="0" recordCount="243.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="216.0"/>
+											<ScoreDistribution value="1" recordCount="27.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="Education" operator="equal" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Gender" operator="equal" value="Male"/>
+										<Node score="0" recordCount="508.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="392.0"/>
+											<ScoreDistribution value="1" recordCount="116.0"/>
+										</Node>
+										<Node score="1" recordCount="82.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="36.0"/>
+											<ScoreDistribution value="1" recordCount="46.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+									<Node>
+										<SimplePredicate field="Employment" operator="notEqual" value="PSFederal"/>
+										<Node score="1" recordCount="125.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="61.0"/>
+											<ScoreDistribution value="1" recordCount="64.0"/>
+										</Node>
+										<Node score="1" recordCount="6.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="6.0">
+										<SimplePredicate field="Employment" operator="equal" value="PSFederal"/>
+										<ScoreDistribution value="0" recordCount="6.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+								<Node>
+									<SimplePredicate field="Employment" operator="notEqual" value="Consultant"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Cleaner"/>
+										<Node score="0" recordCount="241.0">
+											<SimplePredicate field="Gender" operator="notEqual" value="Female"/>
+											<ScoreDistribution value="0" recordCount="235.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="0" recordCount="241.0">
+											<SimplePredicate field="Gender" operator="equal" value="Female"/>
+											<ScoreDistribution value="0" recordCount="239.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="42.0">
+										<SimplePredicate field="Occupation" operator="equal" value="Cleaner"/>
+										<ScoreDistribution value="0" recordCount="42.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Employment" operator="equal" value="Consultant"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Sales"/>
+										<Node score="0" recordCount="16.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="16.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="1.0">
+										<SimplePredicate field="Occupation" operator="equal" value="Sales"/>
+										<ScoreDistribution value="0" recordCount="1.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="49.0"/>
+							<Node>
+								<SimplePredicate field="Occupation" operator="notEqual" value="Professional"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Associate"/>
+										<Node score="0" recordCount="78.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="74.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="0" recordCount="34.0">
+											<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="27.0"/>
+											<ScoreDistribution value="1" recordCount="7.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="Associate"/>
+										<Node score="1" recordCount="4.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Consultant"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+										<Node score="0" recordCount="4.0">
+											<SimplePredicate field="Employment" operator="equal" value="Consultant"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Married"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+										<Node score="0" recordCount="162.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Yr1t4"/>
+											<ScoreDistribution value="0" recordCount="88.0"/>
+											<ScoreDistribution value="1" recordCount="74.0"/>
+										</Node>
+										<Node score="0" recordCount="3.0">
+											<SimplePredicate field="Education" operator="equal" value="Yr1t4"/>
+											<ScoreDistribution value="0" recordCount="3.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+										<Node score="1" recordCount="45.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="163646.3359375"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="41.0"/>
+										</Node>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="163646.3359375"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Occupation" operator="equal" value="Professional"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+									<Node score="0" recordCount="3.0">
+										<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+										<ScoreDistribution value="0" recordCount="3.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+										<Node score="1" recordCount="4.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="99215.44921875"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="0" recordCount="4.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="99215.44921875"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Married"/>
+									<Node score="1" recordCount="8.0">
+										<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="34.0"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="8.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="greaterThan" value="34.0"/>
+										<Node score="1" recordCount="32.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="PSLocal"/>
+											<ScoreDistribution value="0" recordCount="10.0"/>
+											<ScoreDistribution value="1" recordCount="22.0"/>
+										</Node>
+										<Node score="0" recordCount="3.0">
+											<SimplePredicate field="Employment" operator="equal" value="PSLocal"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="6">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Employment"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Gender"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="Education" operator="notEqual" value="Bachelor"/>
+							<Node>
+								<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="51111.455078125"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Professional"/>
+										<Node score="0" recordCount="117.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="49672.240234375"/>
+											<ScoreDistribution value="0" recordCount="116.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="49672.240234375"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Occupation" operator="equal" value="Professional"/>
+										<Node score="1" recordCount="7.0">
+											<SimplePredicate field="Gender" operator="notEqual" value="Female"/>
+											<ScoreDistribution value="0" recordCount="3.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="0" recordCount="14.0">
+											<SimplePredicate field="Gender" operator="equal" value="Female"/>
+											<ScoreDistribution value="0" recordCount="14.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Married"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Master"/>
+										<Node score="0" recordCount="142.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+											<ScoreDistribution value="0" recordCount="73.0"/>
+											<ScoreDistribution value="1" recordCount="69.0"/>
+										</Node>
+										<Node score="0" recordCount="315.0">
+											<SimplePredicate field="Employment" operator="equal" value="Private"/>
+											<ScoreDistribution value="0" recordCount="236.0"/>
+											<ScoreDistribution value="1" recordCount="79.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Education" operator="equal" value="Master"/>
+										<Node score="1" recordCount="50.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="45.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="double(float(Income))" operator="greaterThan" value="51111.455078125"/>
+								<Node>
+									<SimplePredicate field="Employment" operator="notEqual" value="Consultant"/>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="38.5"/>
+										<Node score="0" recordCount="539.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Support"/>
+											<ScoreDistribution value="0" recordCount="524.0"/>
+											<ScoreDistribution value="1" recordCount="15.0"/>
+										</Node>
+										<Node score="0" recordCount="11.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Support"/>
+											<ScoreDistribution value="0" recordCount="8.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="greaterThan" value="38.5"/>
+										<Node score="0" recordCount="225.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="174.0"/>
+											<ScoreDistribution value="1" recordCount="51.0"/>
+										</Node>
+										<Node score="0" recordCount="56.0">
+											<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+											<ScoreDistribution value="0" recordCount="54.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Employment" operator="equal" value="Consultant"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Sales"/>
+										<Node score="0" recordCount="45.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="39.0"/>
+											<ScoreDistribution value="1" recordCount="6.0"/>
+										</Node>
+										<Node score="0" recordCount="15.0">
+											<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+											<ScoreDistribution value="0" recordCount="15.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="6.0">
+										<SimplePredicate field="Occupation" operator="equal" value="Sales"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="6.0"/>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="Education" operator="equal" value="Bachelor"/>
+							<Node>
+								<SimplePredicate field="Occupation" operator="notEqual" value="Clerical"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="Employment" operator="notEqual" value="PSLocal"/>
+										<Node score="0" recordCount="94.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+											<ScoreDistribution value="0" recordCount="85.0"/>
+											<ScoreDistribution value="1" recordCount="9.0"/>
+										</Node>
+										<Node score="1" recordCount="170.0">
+											<SimplePredicate field="Marital" operator="equal" value="Married"/>
+											<ScoreDistribution value="0" recordCount="43.0"/>
+											<ScoreDistribution value="1" recordCount="127.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Employment" operator="equal" value="PSLocal"/>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="7.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="1" recordCount="12.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="11.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="42.0"/>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+											<ScoreDistribution value="0" recordCount="8.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="10.0">
+											<SimplePredicate field="Employment" operator="equal" value="Private"/>
+											<ScoreDistribution value="0" recordCount="9.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Age))" operator="greaterThan" value="42.0"/>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+											<ScoreDistribution value="0" recordCount="8.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="12.0">
+											<SimplePredicate field="Employment" operator="equal" value="Private"/>
+											<ScoreDistribution value="0" recordCount="5.0"/>
+											<ScoreDistribution value="1" recordCount="7.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="Occupation" operator="equal" value="Clerical"/>
+								<Node>
+									<SimplePredicate field="Employment" operator="notEqual" value="Private"/>
+									<Node score="0" recordCount="9.0">
+										<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+										<ScoreDistribution value="0" recordCount="9.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+										<Node score="0" recordCount="2.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="39.0"/>
+											<ScoreDistribution value="0" recordCount="2.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="39.0"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node score="0" recordCount="21.0">
+									<SimplePredicate field="Employment" operator="equal" value="Private"/>
+									<ScoreDistribution value="0" recordCount="21.0"/>
+									<ScoreDistribution value="1" recordCount="0.0"/>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="7">
+				<True/>
+				<TreeModel functionName="classification" splitCharacteristic="binarySplit">
+					<MiningSchema>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="double(float(Income))"/>
+						<MiningField name="double(float(Age))"/>
+						<MiningField name="double(float(Hours))"/>
+					</MiningSchema>
+					<Node>
+						<True/>
+						<Node>
+							<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="41.5"/>
+							<Node>
+								<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="49575.396484375"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="27.5"/>
+										<Node score="0" recordCount="6.0">
+											<SimplePredicate field="Marital" operator="notEqual" value="Married-spouse-absent"/>
+											<ScoreDistribution value="0" recordCount="6.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="3.0">
+											<SimplePredicate field="Marital" operator="equal" value="Married-spouse-absent"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="3.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="27.5"/>
+										<Node score="0" recordCount="78.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Professional"/>
+											<ScoreDistribution value="0" recordCount="77.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+										<Node score="0" recordCount="14.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Professional"/>
+											<ScoreDistribution value="0" recordCount="10.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Married"/>
+									<Node>
+										<SimplePredicate field="Education" operator="notEqual" value="Professional"/>
+										<Node score="0" recordCount="20.0">
+											<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="28.5"/>
+											<ScoreDistribution value="0" recordCount="20.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="0" recordCount="366.0">
+											<SimplePredicate field="double(float(Age))" operator="greaterThan" value="28.5"/>
+											<ScoreDistribution value="0" recordCount="223.0"/>
+											<ScoreDistribution value="1" recordCount="143.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="6.0">
+										<SimplePredicate field="Education" operator="equal" value="Professional"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="6.0"/>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="double(float(Income))" operator="greaterThan" value="49575.396484375"/>
+								<Node>
+									<SimplePredicate field="Occupation" operator="notEqual" value="Service"/>
+									<Node>
+										<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="344698.1875"/>
+										<Node score="0" recordCount="255.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="39.0"/>
+											<ScoreDistribution value="0" recordCount="238.0"/>
+											<ScoreDistribution value="1" recordCount="17.0"/>
+										</Node>
+										<Node score="0" recordCount="412.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="39.0"/>
+											<ScoreDistribution value="0" recordCount="347.0"/>
+											<ScoreDistribution value="1" recordCount="65.0"/>
+										</Node>
+									</Node>
+									<Node score="1" recordCount="7.0">
+										<SimplePredicate field="double(float(Income))" operator="greaterThan" value="344698.1875"/>
+										<ScoreDistribution value="0" recordCount="0.0"/>
+										<ScoreDistribution value="1" recordCount="7.0"/>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Occupation" operator="equal" value="Service"/>
+									<Node score="0" recordCount="106.0">
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="38.5"/>
+										<ScoreDistribution value="0" recordCount="106.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="38.5"/>
+										<Node score="0" recordCount="47.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="45.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+										<Node score="0" recordCount="6.0">
+											<SimplePredicate field="Education" operator="equal" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="6.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+						<Node>
+							<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="41.5"/>
+							<Node>
+								<SimplePredicate field="double(float(Age))" operator="lessOrEqual" value="32.5"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Absent"/>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="42.5"/>
+										<Node score="1" recordCount="7.0">
+											<SimplePredicate field="double(float(Income))" operator="lessOrEqual" value="91436.658203125"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="7.0"/>
+										</Node>
+										<Node score="0" recordCount="1.0">
+											<SimplePredicate field="double(float(Income))" operator="greaterThan" value="91436.658203125"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="42.5"/>
+										<Node score="0" recordCount="67.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Professional"/>
+											<ScoreDistribution value="0" recordCount="56.0"/>
+											<ScoreDistribution value="1" recordCount="11.0"/>
+										</Node>
+										<Node score="1" recordCount="7.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Professional"/>
+											<ScoreDistribution value="0" recordCount="3.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Absent"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Service"/>
+										<Node score="0" recordCount="82.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="78.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+										<Node score="1" recordCount="1.0">
+											<SimplePredicate field="Education" operator="equal" value="Doctorate"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="1.0"/>
+										</Node>
+									</Node>
+									<Node score="0" recordCount="6.0">
+										<SimplePredicate field="Occupation" operator="equal" value="Service"/>
+										<ScoreDistribution value="0" recordCount="6.0"/>
+										<ScoreDistribution value="1" recordCount="0.0"/>
+									</Node>
+								</Node>
+							</Node>
+							<Node>
+								<SimplePredicate field="double(float(Age))" operator="greaterThan" value="32.5"/>
+								<Node>
+									<SimplePredicate field="Marital" operator="notEqual" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="Marital" operator="notEqual" value="Married"/>
+										<Node score="0" recordCount="59.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="51.0"/>
+											<ScoreDistribution value="1" recordCount="8.0"/>
+										</Node>
+										<Node score="0" recordCount="8.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Executive"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="4.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="1" recordCount="236.0">
+											<SimplePredicate field="Occupation" operator="notEqual" value="Repair"/>
+											<ScoreDistribution value="0" recordCount="86.0"/>
+											<ScoreDistribution value="1" recordCount="150.0"/>
+										</Node>
+										<Node score="1" recordCount="42.0">
+											<SimplePredicate field="Occupation" operator="equal" value="Repair"/>
+											<ScoreDistribution value="0" recordCount="20.0"/>
+											<ScoreDistribution value="1" recordCount="22.0"/>
+										</Node>
+									</Node>
+								</Node>
+								<Node>
+									<SimplePredicate field="Marital" operator="equal" value="Divorced"/>
+									<Node>
+										<SimplePredicate field="Occupation" operator="notEqual" value="Protective"/>
+										<Node score="0" recordCount="50.0">
+											<SimplePredicate field="Education" operator="notEqual" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="38.0"/>
+											<ScoreDistribution value="1" recordCount="12.0"/>
+										</Node>
+										<Node score="0" recordCount="4.0">
+											<SimplePredicate field="Education" operator="equal" value="Yr10"/>
+											<ScoreDistribution value="0" recordCount="4.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+									</Node>
+									<Node>
+										<SimplePredicate field="Occupation" operator="equal" value="Protective"/>
+										<Node score="0" recordCount="1.0">
+											<SimplePredicate field="double(float(Hours))" operator="lessOrEqual" value="54.0"/>
+											<ScoreDistribution value="0" recordCount="1.0"/>
+											<ScoreDistribution value="1" recordCount="0.0"/>
+										</Node>
+										<Node score="1" recordCount="2.0">
+											<SimplePredicate field="double(float(Hours))" operator="greaterThan" value="54.0"/>
+											<ScoreDistribution value="0" recordCount="0.0"/>
+											<ScoreDistribution value="1" recordCount="2.0"/>
+										</Node>
+									</Node>
+								</Node>
+							</Node>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+		</Segmentation>
+	</MiningModel>
+</PMML>
