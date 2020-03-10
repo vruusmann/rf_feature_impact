@@ -34,7 +34,7 @@ public class Main {
 	public void main(String... args) throws Exception {
 		File pmmlFile = new File(args[0]);
 		File csvFile = new File(args[1]);
-		String targetClass = args[2];
+		String targetClass = (args.length > 2 ? args[2] : null);
 
 		Evaluator evaluator = loadEvaluator(pmmlFile);
 
@@ -96,26 +96,38 @@ public class Main {
 		HasDecisionPath hasDecisionPath = (HasDecisionPath)targetValue;
 
 		Number parentClassProbability = 0d;
+		Number parentScore = 0d;
 
 		List<Node> nodes = hasDecisionPath.getDecisionPath();
 		for(int i = 0; i < nodes.size(); i++){
 			Node node = nodes.get(i);
 
-			if(!node.hasScoreDistributions()){
-				continue;
-			}
-
 			Predicate predicate = node.getPredicate();
-			Number recordCount = node.getRecordCount();
-			Number classRecordCount = getRecordCount(node.getScoreDistributions(), targetClass);
 
-			Number classProbability = (classRecordCount.doubleValue() / recordCount.doubleValue());
+			// Probabilistic classification
+			if(node.hasScoreDistributions()){
+				Number recordCount = node.getRecordCount();
+				Number classRecordCount = getRecordCount(node.getScoreDistributions(), targetClass);
 
-			Number impact = (classProbability.doubleValue() - parentClassProbability.doubleValue());
+				Number classProbability = (classRecordCount.doubleValue() / recordCount.doubleValue());
 
-			result.add(new Contribution(segmentId, weight, i, predicate, impact));
+				Number impact = (classProbability.doubleValue() - parentClassProbability.doubleValue());
 
-			parentClassProbability = classProbability;
+				result.add(new Contribution(segmentId, weight, i, predicate, impact));
+
+				parentClassProbability = classProbability;
+			} else
+
+			// Regression
+			{
+				Number score = (Number)node.getScore();
+
+				Number impact = (score.doubleValue() - parentScore.doubleValue());
+
+				result.add(new Contribution(segmentId, weight, i, predicate, impact));
+
+				parentScore = score;
+			}
 		}
 
 		return result;

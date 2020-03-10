@@ -11,7 +11,6 @@ import org.dmg.pmml.ScoreDistribution;
 import org.dmg.pmml.VisitorAction;
 import org.dmg.pmml.tree.Node;
 import org.dmg.pmml.tree.TreeModel;
-import org.jpmml.evaluator.UnsupportedElementException;
 import org.jpmml.model.visitors.AbstractVisitor;
 
 public class ScoreDistributionGenerator extends AbstractVisitor {
@@ -21,7 +20,7 @@ public class ScoreDistributionGenerator extends AbstractVisitor {
 		MiningFunction miningFunction = treeModel.getMiningFunction();
 
 		if(!(MiningFunction.CLASSIFICATION).equals(miningFunction)){
-			throw new UnsupportedElementException(treeModel);
+			return VisitorAction.SKIP;
 		}
 
 		return super.visit(treeModel);
