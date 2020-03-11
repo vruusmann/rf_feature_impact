@@ -1,4 +1,4 @@
-package feature_impact;
+package feature_impact.visitors;
 
 import java.util.Collection;
 import java.util.List;
