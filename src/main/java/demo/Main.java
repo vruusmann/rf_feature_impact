@@ -11,6 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import com.google.common.collect.Iterables;
 import org.dmg.pmml.FieldName;
 import org.dmg.pmml.Predicate;
@@ -30,18 +33,83 @@ import org.jpmml.model.VisitorBattery;
 
 public class Main {
 
+	@Parameter (
+		names = "--help",
+		description = "Show the list of configuration options and exit",
+		help = true
+	)
+	private boolean help = false;
+
+	@Parameter (
+		names = {"--pmml-model"},
+		description = "PMML model file",
+		required = true
+	)
+	private File modelFile = null;
+
+	@Parameter (
+		names = {"--target-class"},
+		description = "Target class label for probabilistic classification models"
+	)
+	private String targetClass = null;
+
+	@Parameter (
+		names = {"--csv-input"},
+		description = "CSV input file",
+		required = true
+	)
+	private File inputFile = null;
+
+	@Parameter (
+		names = "--csv-output",
+		description = "CSV output file",
+		required = true
+	)
+	private File outputFile = null;
+
+
 	static
 	public void main(String... args) throws Exception {
-		File pmmlFile = new File(args[0]);
-		File csvFile = new File(args[1]);
-		String targetClass = (args.length > 2 ? args[2] : null);
+		Main main = new Main();
 
-		Evaluator evaluator = loadEvaluator(pmmlFile);
+		JCommander commander = new JCommander(main);
+		commander.setProgramName(Main.class.getName());
+
+		try {
+			commander.parse(args);
+		} catch(ParameterException pe){
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(pe.toString());
+			sb.append("\n");
+
+			commander.usage(sb);
+
+			System.err.println(sb.toString());
+
+			System.exit(-1);
+		}
+
+		if(main.help){
+			StringBuilder sb = new StringBuilder();
+
+			commander.usage(sb);
+
+			System.out.println(sb.toString());
+
+			System.exit(0);
+		}
+
+		main.run();
+	}
+
+	private void run() throws Exception {
+		Evaluator evaluator = loadEvaluator(this.modelFile);
 
 		// Supervised learning models are expected to have exactly one target field (aka label)
 		TargetField targetField = Iterables.getOnlyElement(evaluator.getTargetFields());
 
-		List<Map<FieldName, ?>> arguments = loadArguments(csvFile);
+		List<Map<FieldName, ?>> arguments = loadArguments(this.inputFile);
 
 		System.out.println("Id" + CSV_SEPARATOR + "Tree" + CSV_SEPARATOR + "Weight" + CSV_SEPARATOR + "Depth" + CSV_SEPARATOR + "Field" + CSV_SEPARATOR + "Impact");
 
@@ -56,7 +124,7 @@ public class Main {
 			Object targetValue = rowResults.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			printRow(row, targetValue, targetClass);
+			printRow(row, targetValue, this.targetClass);
 		}
 	}
 

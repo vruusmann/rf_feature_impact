@@ -27,12 +27,18 @@ The resources folder `src/main/resources` contains two random forest examples.
 Scoring the classification example:
 
 ```
-$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestClassifier.pmml src/main/resources/csv/Audit.csv 0
-$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestClassifier.pmml src/main/resources/csv/Audit.csv 1
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestClassifier.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestClassifier.pmml --target-class 1 --csv-input src/main/resources/csv/Audit.csv
 ```
 
 Scoring the regression example:
 
 ```
-$ java -jar target/demo-executable-1.0-SNAPSHOT.jar src/main/resources/pmml/RandomForestRegressor.pmml src/main/resources/csv/Auto.csv
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestRegressor.pmml --csv-input src/main/resources/csv/Auto.csv
+```
+
+Getting help:
+
+```
+$ java -jar target/demo-executable-1.0-SNAPSHOT.jar --help
 ```
