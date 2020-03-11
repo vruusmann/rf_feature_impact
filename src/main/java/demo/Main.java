@@ -1,15 +1,17 @@
 package demo;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -22,6 +24,8 @@ import org.dmg.pmml.adapters.NodeAdapter;
 import org.dmg.pmml.tree.ComplexNode;
 import org.dmg.pmml.tree.Node;
 import org.dmg.pmml.tree.NodeTransformer;
+import org.jpmml.evaluator.CsvUtil;
+import org.jpmml.evaluator.CsvUtil.Table;
 import org.jpmml.evaluator.Evaluator;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
 import org.jpmml.evaluator.TargetField;
@@ -109,27 +113,50 @@ public class Main {
 		// Supervised learning models are expected to have exactly one target field (aka label)
 		TargetField targetField = Iterables.getOnlyElement(evaluator.getTargetFields());
 
-		List<Map<FieldName, ?>> arguments = loadArguments(this.inputFile);
+		Table inputTable;
 
-		System.out.println("Id" + CSV_SEPARATOR + "Tree" + CSV_SEPARATOR + "Weight" + CSV_SEPARATOR + "Depth" + CSV_SEPARATOR + "Field" + CSV_SEPARATOR + "Impact");
+		try(InputStream is = new FileInputStream(this.inputFile)){
+			inputTable = CsvUtil.readTable(is, Main.CSV_SEPARATOR);
+		}
 
-		for(int row = 0; row < arguments.size(); row++){
-			Map<FieldName, ?> rowArguments = arguments.get(row);
-			Map<FieldName, ?> rowResults = evaluator.evaluate(rowArguments);
+		Table outputTable = new Table();
+		outputTable.setSeparator(Main.CSV_SEPARATOR);
+
+		outputTable.add(Arrays.asList("Id", "Segment", "Weight", "Depth", "Field", "Impact"));
+
+		// The first line of the CSV input file is field names
+		List<FieldName> headerRow = inputTable.remove(0).stream()
+			.map(string -> FieldName.create(string))
+			.collect(Collectors.toList());
+
+		for(int row = 0; row < inputTable.size(); row++){
+			Map<FieldName, Object> arguments = new LinkedHashMap<>();
+
+			List<String> contentRow = inputTable.get(row);
+
+			for(int column = 0; column < contentRow.size(); column++){
+				arguments.put(headerRow.get(column), contentRow.get(column));
+			}
+
+			Map<FieldName, ?> results = evaluator.evaluate(arguments);
 
 			// The target value is a subclass of org.jpmml.evaluator.Computable,
 			// and may expose different aspects of the prediction process by implementing org.jpmml.evaluator.ResultFeature subinterfaces.
 			// The collection of exposed aspects depends on the model type, and evaluator run-time configuration
 			// (exposing more aspects has slight memory/performance penalty, but nothing too serious).
-			Object targetValue = rowResults.get(targetField.getName());
+			Object targetValue = results.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			printRow(row, targetValue, this.targetClass);
+			printRow(String.valueOf(row), targetValue, this.targetClass, outputTable);
+		}
+
+		try(OutputStream os = new FileOutputStream(this.outputFile)){
+			CsvUtil.writeTable(outputTable, os);
 		}
 	}
 
 	static
-	private void printRow(int row, Object targetValue, String targetClass){
+	private void printRow(String id, Object targetValue, String targetClass, Table outputTable){
 		List<Contribution> contributions = new ArrayList<>();
 
 		// Test, if the prediction coming from an ensemble model (aka segmentation model)?
@@ -153,7 +180,11 @@ public class Main {
 		}
 
 		for(Contribution contribution : contributions){
-			System.out.println(row + CSV_SEPARATOR + contribution.getSegmentId() + CSV_SEPARATOR + contribution.getWeight() + CSV_SEPARATOR + contribution.getDepth() + CSV_SEPARATOR + contribution.getField() + CSV_SEPARATOR + contribution.getImpact());
+			List<String> row = Arrays.asList(id, contribution.getSegmentId(), contribution.getWeight(), contribution.getDepth(), contribution.getField(), contribution.getImpact()).stream()
+				.map(object -> String.valueOf(object))
+				.collect(Collectors.toList());
+
+			outputTable.add(row);
 		}
 	}
 
@@ -258,42 +289,6 @@ public class Main {
 		evaluator.verify();
 
 		return evaluator;
-	}
-
-	static
-	private List<Map<FieldName, ?>> loadArguments(File csvFile) throws Exception {
-		List<Map<FieldName, ?>> result = new ArrayList<>();
-
-		try(InputStream is = new FileInputStream(csvFile)){
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-			String header = reader.readLine();
-			String[] headerCells = header.split(CSV_SEPARATOR);
-
-			for(int row = 0; true; row++){
-				String content = reader.readLine();
-				if(content == null){
-					break;
-				}
-
-				String[] contentCells = content.split(CSV_SEPARATOR);
-				if(headerCells.length != contentCells.length){
-					throw new IllegalArgumentException("Expected " + headerCells.length + " cells, got " + contentCells.length + " cells");
-				}
-
-				Map<FieldName, Object> arguments = new LinkedHashMap<>();
-
-				for(int column = 0; column < headerCells.length; column++){
-					arguments.put(FieldName.create(headerCells[column]), contentCells[column]);
-				}
-
-				result.add(arguments);
-			}
-
-			reader.close();
-		}
-
-		return result;
 	}
 
 	private static final String CSV_SEPARATOR = ",";
