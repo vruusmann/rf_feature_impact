@@ -194,7 +194,7 @@ public class Main {
 			Object targetValue = results.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			printRow(String.valueOf(row), targetValue, this.targetClass, this.aggregate, outputTable);
+			computeExplanation(String.valueOf(row), targetValue, this.targetClass, this.aggregate, outputTable);
 		}
 
 		List<String> headerRow = outputTable.getHeader();
@@ -212,7 +212,7 @@ public class Main {
 	}
 
 	static
-	private void printRow(String id, Object targetValue, String targetClass, boolean aggregate, Table outputTable){
+	private void computeExplanation(String id, Object targetValue, String targetClass, boolean aggregate, Table outputTable){
 		List<Contribution> contributions = new ArrayList<>();
 
 		int size = 1;
@@ -230,14 +230,14 @@ public class Main {
 				Object segmentTargetValue = segmentResult.getTargetValue();
 				Number segmentWeight = segmentResult.getWeight();
 
-				contributions.addAll(printDecisionPath(segmentResult.getEntityId(), segmentWeight, segmentTargetValue, targetClass));
+				contributions.addAll(computeFeatureContributions(segmentResult.getEntityId(), segmentWeight, segmentTargetValue, targetClass));
 			}
 		} else
 
 		// Not an ensemble model.
 		// For example, a standalone decision tree model.
 		{
-			contributions.addAll(printDecisionPath(null, 1.0d, targetValue, targetClass));
+			contributions.addAll(computeFeatureContributions(null, 1.0d, targetValue, targetClass));
 		} // End if
 
 		if(aggregate){
@@ -286,7 +286,7 @@ public class Main {
 	}
 
 	static
-	private List<Contribution> printDecisionPath(String segmentId, Number weight, Object targetValue, String targetClass){
+	private List<Contribution> computeFeatureContributions(String segmentId, Number weight, Object targetValue, String targetClass){
 		List<Contribution> result = new ArrayList<>();
 
 		HasDecisionPath hasDecisionPath = (HasDecisionPath)targetValue;
