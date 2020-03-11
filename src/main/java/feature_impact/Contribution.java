@@ -58,7 +58,7 @@ public class Contribution {
 			return hasFieldReference.getField();
 		}
 
-		return null;
+		return Contribution.TRUE;
 	}
 
 	public Predicate getPredicate(){
@@ -76,4 +76,6 @@ public class Contribution {
 	private void setImpact(Number impact){
 		this.impact = impact;
 	}
+
+	public static final FieldName TRUE = FieldName.create("(true)");
 }

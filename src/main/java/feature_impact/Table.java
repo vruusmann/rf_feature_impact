@@ -12,6 +12,21 @@ public class Table extends ArrayList<List<String>> {
 		super(1024);
 	}
 
+	public List<String> getHeader(){
+		return get(0);
+	}
+
+	public void setHeader(List<String> header){
+
+		if(isEmpty()){
+			add(header);
+		} else
+
+		{
+			set(0, header);
+		}
+	}
+
 	public String getSeparator(){
 		return this.separator;
 	}

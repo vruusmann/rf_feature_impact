@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.beust.jcommander.JCommander;
@@ -55,6 +57,13 @@ public class Main {
 		description = "Target class label for probabilistic classification models"
 	)
 	private String targetClass = null;
+
+	@Parameter (
+		names = {"--aggregate"},
+		description = "Aggregate contributions by prediction",
+		arity = 1
+	)
+	private boolean aggregate = false;
 
 	@Parameter (
 		names = {"--csv-input"},
@@ -118,23 +127,29 @@ public class Main {
 			inputTable = CsvUtil.readTable(is, Main.CSV_SEPARATOR);
 		}
 
-		Table outputTable = new Table();
-		outputTable.setSeparator(Main.CSV_SEPARATOR);
-
-		outputTable.add(Arrays.asList("Id", "Segment", "Weight", "Depth", "Field", "Impact"));
-
 		// The first line of the CSV input file is field names
-		List<FieldName> headerRow = inputTable.remove(0).stream()
+		List<FieldName> inputFields = inputTable.remove(0).stream()
 			.map(string -> FieldName.create(string))
 			.collect(Collectors.toList());
 
+		Table outputTable = new Table();
+		outputTable.setSeparator(Main.CSV_SEPARATOR);
+
+		if(this.aggregate){
+			outputTable.setHeader(Arrays.asList(Contribution.TRUE.getValue()));
+		} else
+
+		{
+			outputTable.setHeader(Arrays.asList("Id", "Segment", "Weight", "Depth", "Field", "Impact"));
+		}
+
 		for(int row = 0; row < inputTable.size(); row++){
+			List<String> content = inputTable.get(row);
+
 			Map<FieldName, Object> arguments = new LinkedHashMap<>();
 
-			List<String> contentRow = inputTable.get(row);
-
-			for(int column = 0; column < contentRow.size(); column++){
-				arguments.put(headerRow.get(column), contentRow.get(column));
+			for(int column = 0; column < content.size(); column++){
+				arguments.put(inputFields.get(column), content.get(column));
 			}
 
 			Map<FieldName, ?> results = evaluator.evaluate(arguments);
@@ -146,7 +161,16 @@ public class Main {
 			Object targetValue = results.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			printRow(String.valueOf(row), targetValue, this.targetClass, outputTable);
+			printRow(String.valueOf(row), targetValue, this.targetClass, this.aggregate, outputTable);
+		}
+
+		List<String> headerRow = outputTable.getHeader();
+		for(int i = 1; i < outputTable.size(); i++){
+			List<String> bodyRow = outputTable.get(i);
+
+			while(bodyRow.size() < headerRow.size()){
+				bodyRow.add(String.valueOf(null));
+			}
 		}
 
 		try(OutputStream os = new FileOutputStream(this.outputFile)){
@@ -155,7 +179,7 @@ public class Main {
 	}
 
 	static
-	private void printRow(String id, Object targetValue, String targetClass, Table outputTable){
+	private void printRow(String id, Object targetValue, String targetClass, boolean aggregate, Table outputTable){
 		List<Contribution> contributions = new ArrayList<>();
 
 		// Test, if the prediction coming from an ensemble model (aka segmentation model)?
@@ -176,14 +200,47 @@ public class Main {
 		// For example, a standalone decision tree model.
 		{
 			contributions.addAll(printDecisionPath(null, 1.0d, targetValue, targetClass));
-		}
+		} // End if
 
-		for(Contribution contribution : contributions){
-			List<String> row = Arrays.asList(id, contribution.getSegmentId(), contribution.getWeight(), contribution.getDepth(), contribution.getField(), contribution.getImpact()).stream()
-				.map(object -> String.valueOf(object))
-				.collect(Collectors.toList());
+		if(aggregate){
+			Map<FieldName, Double> aggregateImpacts = contributions.stream()
+				.collect(Collectors.groupingBy(Contribution::getField, Collectors.mapping(Contribution::getImpact, Collectors.summingDouble(Number::doubleValue))));
+
+			List<String> header = outputTable.getHeader();
+
+			Set<FieldName> fieldNames = header.stream()
+				.map(FieldName::create)
+				.collect(Collectors.toCollection( LinkedHashSet::new));
+
+			boolean changed = fieldNames.addAll(aggregateImpacts.keySet());
+			if(changed){
+				header = fieldNames.stream()
+					.map(FieldName::getValue)
+					.collect(Collectors.toList());
+
+				outputTable.setHeader(header);
+			}
+
+
+			List<String> row = new ArrayList<>();
+
+			for(FieldName fieldName : fieldNames){
+				Double aggregateImpact = aggregateImpacts.get(fieldName);
+
+				row.add(String.valueOf(aggregateImpact));
+			}
 
 			outputTable.add(row);
+		} else
+
+		{
+			for(Contribution contribution : contributions){
+				List<String> row = Arrays.asList(id, contribution.getSegmentId(), contribution.getWeight(), contribution.getDepth(), contribution.getField(), contribution.getImpact()).stream()
+					.map(object -> String.valueOf(object))
+					.collect(Collectors.toList());
+
+				outputTable.add(row);
+			}
 		}
 	}
 
