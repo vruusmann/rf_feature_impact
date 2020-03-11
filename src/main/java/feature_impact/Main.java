@@ -182,12 +182,17 @@ public class Main {
 	private void printRow(String id, Object targetValue, String targetClass, boolean aggregate, Table outputTable){
 		List<Contribution> contributions = new ArrayList<>();
 
+		int size = 1;
+
 		// Test, if the prediction coming from an ensemble model (aka segmentation model)?
 		// For example, a random forest model
 		if(targetValue instanceof HasSegmentation){
 			HasSegmentation hasSegmentation = (HasSegmentation)targetValue;
 
 			Collection<? extends SegmentResult> segmentResults = hasSegmentation.getSegmentResults();
+
+			size = segmentResults.size();
+
 			for(SegmentResult segmentResult : segmentResults){
 				Object segmentTargetValue = segmentResult.getTargetValue();
 				Number segmentWeight = segmentResult.getWeight();
@@ -221,11 +226,14 @@ public class Main {
 				outputTable.setHeader(header);
 			}
 
-
 			List<String> row = new ArrayList<>();
 
 			for(FieldName fieldName : fieldNames){
 				Double aggregateImpact = aggregateImpacts.get(fieldName);
+
+				if((fieldName).equals(Contribution.TRUE)){
+					aggregateImpact = (aggregateImpact.doubleValue() / size);
+				}
 
 				row.add(String.valueOf(aggregateImpact));
 			}
