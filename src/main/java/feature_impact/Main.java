@@ -21,15 +21,23 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.collect.Iterables;
 import feature_impact.visitors.ScoreDistributionGenerator;
 import org.dmg.pmml.FieldName;
+import org.dmg.pmml.Model;
 import org.dmg.pmml.Predicate;
 import org.dmg.pmml.ScoreDistribution;
 import org.dmg.pmml.adapters.NodeAdapter;
+import org.dmg.pmml.mining.MiningModel;
+import org.dmg.pmml.mining.Segmentation;
+import org.dmg.pmml.mining.Segmentation.MultipleModelMethod;
 import org.dmg.pmml.tree.ComplexNode;
 import org.dmg.pmml.tree.Node;
 import org.dmg.pmml.tree.NodeTransformer;
-import org.jpmml.evaluator.Evaluator;
+import org.dmg.pmml.tree.TreeModel;
+import org.jpmml.evaluator.Classification;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
+import org.jpmml.evaluator.ModelEvaluator;
+import org.jpmml.evaluator.Regression;
 import org.jpmml.evaluator.TargetField;
+import org.jpmml.evaluator.UnsupportedElementException;
 import org.jpmml.evaluator.mining.HasSegmentation;
 import org.jpmml.evaluator.mining.SegmentResult;
 import org.jpmml.evaluator.tree.HasDecisionPath;
@@ -116,7 +124,32 @@ public class Main {
 	}
 
 	private void run() throws Exception {
-		Evaluator evaluator = loadEvaluator(this.modelFile);
+		ModelEvaluator<?> evaluator = loadModelEvaluator(this.modelFile);
+
+		Model model = evaluator.getModel();
+
+		if(model instanceof MiningModel){
+			MiningModel miningModel = (MiningModel)model;
+
+			Segmentation segmentation = miningModel.getSegmentation();
+
+			MultipleModelMethod multipleModelMethod = segmentation.getMultipleModelMethod();
+			switch(multipleModelMethod){
+				case AVERAGE:
+				case WEIGHTED_AVERAGE:
+					break;
+				default:
+					throw new UnsupportedElementException(miningModel);
+			}
+		} else
+
+		if(model instanceof TreeModel){
+			// Pass
+		} else
+
+		{
+			throw new UnsupportedElementException(model);
+		}
 
 		// Supervised learning models are expected to have exactly one target field (aka label)
 		TargetField targetField = Iterables.getOnlyElement(evaluator.getTargetFields());
@@ -268,7 +301,12 @@ public class Main {
 			Predicate predicate = node.getPredicate();
 
 			// Probabilistic classification
-			if(node.hasScoreDistributions()){
+			if(targetValue instanceof Classification){
+
+				if(!node.hasScoreDistributions()){
+					throw new UnsupportedElementException(node);
+				}
+
 				Number recordCount = node.getRecordCount();
 				Number classRecordCount = getRecordCount(node.getScoreDistributions(), targetClass);
 
@@ -282,7 +320,12 @@ public class Main {
 			} else
 
 			// Regression
-			{
+			if(targetValue instanceof Regression){
+
+				if(!node.hasScore()){
+					throw new UnsupportedElementException(node);
+				}
+
 				Number score = (Number)node.getScore();
 
 				Number impact = (score.doubleValue() - parentScore.doubleValue());
@@ -290,6 +333,10 @@ public class Main {
 				result.add(new Contribution(segmentId, weight, i, predicate, impact));
 
 				parentScore = score;
+			} else
+
+			{
+				throw new IllegalArgumentException();
 			}
 		}
 
@@ -310,7 +357,7 @@ public class Main {
 	}
 
 	static
-	private Evaluator loadEvaluator(File pmmlFile) throws Exception {
+	private ModelEvaluator<?> loadModelEvaluator(File pmmlFile) throws Exception {
 		// By default, the underlying JPMML-Model library optimizes the representation of decision tree models for memory-efficiency.
 		// Memory-efficient Node subclasses are read-only.
 		// As we are interested in rewriting parts of the decision tree data structure (reconstructing record counts at intermediate tree levels),
@@ -339,7 +386,7 @@ public class Main {
 		visitors.add(ScoreDistributionGenerator.class);
 		visitors.addAll(new DefaultVisitorBattery());
 
-		Evaluator evaluator = new LoadingModelEvaluatorBuilder()
+		ModelEvaluator<?> modelEvaluator = new LoadingModelEvaluatorBuilder()
 			.setLocatable(false)
 			.setVisitors(visitors)
 			//.setOutputFilter(OutputFilters.KEEP_FINAL_RESULTS)
@@ -350,9 +397,9 @@ public class Main {
 		NodeAdapter.NODE_TRANSFORMER_PROVIDER.remove();
 
 		// Perforing the self-check
-		evaluator.verify();
+		modelEvaluator.verify();
 
-		return evaluator;
+		return modelEvaluator;
 	}
 
 	private static final String CSV_SEPARATOR = ",";
