@@ -24,8 +24,6 @@ import org.dmg.pmml.adapters.NodeAdapter;
 import org.dmg.pmml.tree.ComplexNode;
 import org.dmg.pmml.tree.Node;
 import org.dmg.pmml.tree.NodeTransformer;
-import org.jpmml.evaluator.CsvUtil;
-import org.jpmml.evaluator.CsvUtil.Table;
 import org.jpmml.evaluator.Evaluator;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
 import org.jpmml.evaluator.TargetField;

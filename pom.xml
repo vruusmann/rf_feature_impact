@@ -23,17 +23,6 @@
 			<artifactId>pmml-evaluator-extension</artifactId>
 			<version>1.4.15</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jpmml</groupId>
-			<artifactId>pmml-evaluator-test</artifactId>
-			<version>1.4.15</version>
-			<exclusions>
-				<exclusion>
-					<groupId>*</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 	<build>
