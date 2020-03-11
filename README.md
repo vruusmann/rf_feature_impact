@@ -27,14 +27,14 @@ The resources folder `src/main/resources` contains two random forest examples.
 Scoring the classification example:
 
 ```
-$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestClassifier.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-impact.csv
-$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestClassifier.pmml --target-class 1 --aggregate true --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-aggregate_impact.csv
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAudit.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-impact.csv
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAudit.pmml --target-class 1 --aggregate true --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-aggregate_impact.csv
 ```
 
 Scoring the regression example:
 
 ```
-$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestRegressor.pmml --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-impact.csv
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAuto.pmml --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-impact.csv
 ```
 
 Getting help:
