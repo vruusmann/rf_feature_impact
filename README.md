@@ -1,3 +1,12 @@
+# About #
+
+A small command-line Java application for analyzing feature impact in decision tree and decision tree ensemble models.
+
+Description of the algorithm:
+
+* [WHY did your model predict THAT? (Part 1 of 2)](https://towardsdatascience.com/why-did-your-model-predict-that-4f7ed3526397)
+* [WHY did your model predict THAT? (Part 2 of 2)](https://towardsdatascience.com/why-did-your-model-predict-that-part-2-of-2-48e3d50e1daf)
+
 # Installation #
 
 Build using Apache Maven:
