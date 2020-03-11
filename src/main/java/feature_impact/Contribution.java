@@ -1,4 +1,4 @@
-package demo;
+package feature_impact;
 
 import org.dmg.pmml.FieldName;
 import org.dmg.pmml.HasFieldReference;

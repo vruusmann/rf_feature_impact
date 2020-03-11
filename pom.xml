@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>demo</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>feature_impact</groupId>
+	<artifactId>feature_impact</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
 	<dependencies>
@@ -50,7 +50,7 @@
 							<finalName>${project.artifactId}-executable-${project.version}</finalName>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>demo.Main</mainClass>
+									<mainClass>feature_impact.Main</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
