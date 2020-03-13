@@ -1,3 +1,4 @@
+from lightgbm import LGBMClassifier, LGBMRegressor
 from sklearn_pandas import DataFrameMapper
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.preprocessing import OneHotEncoder
@@ -5,11 +6,31 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn2pmml import sklearn2pmml
 from sklearn2pmml.decoration import CategoricalDomain, ContinuousDomain
 from sklearn2pmml.pipeline import PMMLPipeline
+from sklearn2pmml.preprocessing.lightgbm import make_lightgbm_dataframe_mapper
 
 import pandas
 
 audit = pandas.read_csv("csv/Audit.csv")
 print(audit.head(3))
+
+columns = audit.columns.tolist()
+
+audit_X = audit[columns[: -1]]
+audit_y = audit[columns[-1]]
+
+audit_X = audit_X.drop(["Deductions"], axis = 1)
+
+def lightgbm_audit():
+	mapper, categorical_feature = make_lightgbm_dataframe_mapper(audit_X.dtypes, missing_value_aware = False)
+	pipeline = PMMLPipeline([
+		("mapper", mapper),
+		("classifier", LGBMClassifier(n_estimators = 7, max_depth = 5, random_state = 13))
+	])
+	pipeline.fit(audit_X, audit_y, classifier__categorical_feature = categorical_feature)
+	pipeline.configure(compact = True)
+	sklearn2pmml(pipeline, "pmml/LightGBMAudit.pmml", with_repr = False)
+
+lightgbm_audit()
 
 def sklearn_audit(classifier, name):
 	pipeline = PMMLPipeline([
@@ -19,7 +40,7 @@ def sklearn_audit(classifier, name):
 		)),
 		("classifier", classifier)
 	])
-	pipeline.fit(audit, audit["Adjusted"])
+	pipeline.fit(audit_X, audit_y)
 	pipeline.configure(compact = False)
 	sklearn2pmml(pipeline, "pmml/" + name + ".pmml", with_repr = False)
 
@@ -29,6 +50,23 @@ sklearn_audit(RandomForestClassifier(n_estimators = 7, max_depth = 5, random_sta
 auto = pandas.read_csv("csv/Auto.csv")
 print(auto.head(3))
 
+columns = auto.columns.tolist()
+
+auto_X = auto[columns[: -1]]
+auto_y = auto[columns[-1]]
+
+def lightgbm_auto():
+	mapper, categorical_feature = make_lightgbm_dataframe_mapper(auto_X.dtypes, missing_value_aware = False)
+	pipeline = PMMLPipeline([
+		("mapper", mapper),
+		("regressor", LGBMRegressor(n_estimators = 5, max_depth = 3, random_state = 13))
+	])
+	pipeline.fit(auto_X, auto_y, regressor__categorical_feature = categorical_feature)
+	pipeline.configure(compact = True)
+	sklearn2pmml(pipeline, "pmml/LightGBMAuto.pmml", with_repr = False)
+
+lightgbm_auto()
+
 def sklearn_auto(regressor, name):
 	pipeline = PMMLPipeline([
 		("mapper", DataFrameMapper(
@@ -37,7 +75,7 @@ def sklearn_auto(regressor, name):
 		)),
 		("regressor", regressor)
 	])
-	pipeline.fit(auto, auto["mpg"])
+	pipeline.fit(auto_X, auto_y)
 	pipeline.configure(compact = False)
 	sklearn2pmml(pipeline, "pmml/" + name + ".pmml", with_repr = False)
 

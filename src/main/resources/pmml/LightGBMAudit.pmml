@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_3" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+	<Header>
+		<Application name="JPMML-SkLearn" version="1.5.32"/>
+		<Timestamp>2020-03-13T15:24:52Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="Adjusted" optype="categorical" dataType="integer">
+			<Value value="0"/>
+			<Value value="1"/>
+		</DataField>
+		<DataField name="Age" optype="continuous" dataType="double"/>
+		<DataField name="Education" optype="categorical" dataType="string">
+			<Value value="Associate"/>
+			<Value value="Bachelor"/>
+			<Value value="College"/>
+			<Value value="Doctorate"/>
+			<Value value="HSgrad"/>
+			<Value value="Master"/>
+			<Value value="Preschool"/>
+			<Value value="Professional"/>
+			<Value value="Vocational"/>
+			<Value value="Yr10"/>
+			<Value value="Yr11"/>
+			<Value value="Yr12"/>
+			<Value value="Yr1t4"/>
+			<Value value="Yr5t6"/>
+			<Value value="Yr7t8"/>
+			<Value value="Yr9"/>
+		</DataField>
+		<DataField name="Marital" optype="categorical" dataType="string">
+			<Value value="Absent"/>
+			<Value value="Divorced"/>
+			<Value value="Married"/>
+			<Value value="Married-spouse-absent"/>
+			<Value value="Unmarried"/>
+			<Value value="Widowed"/>
+		</DataField>
+		<DataField name="Occupation" optype="categorical" dataType="string">
+			<Value value="Cleaner"/>
+			<Value value="Clerical"/>
+			<Value value="Executive"/>
+			<Value value="Farming"/>
+			<Value value="Home"/>
+			<Value value="Machinist"/>
+			<Value value="Military"/>
+			<Value value="Professional"/>
+			<Value value="Protective"/>
+			<Value value="Repair"/>
+			<Value value="Sales"/>
+			<Value value="Service"/>
+			<Value value="Support"/>
+			<Value value="Transport"/>
+		</DataField>
+		<DataField name="Income" optype="continuous" dataType="double"/>
+		<DataField name="Gender" optype="categorical" dataType="string">
+			<Value value="Female"/>
+			<Value value="Male"/>
+		</DataField>
+		<DataField name="Hours" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<MiningModel functionName="classification" algorithmName="LightGBM">
+		<MiningSchema>
+			<MiningField name="Adjusted" usageType="target"/>
+			<MiningField name="Age" importance="56.0"/>
+			<MiningField name="Education" importance="7.0"/>
+			<MiningField name="Marital" importance="7.0"/>
+			<MiningField name="Occupation" importance="7.0"/>
+			<MiningField name="Income" importance="47.0"/>
+			<MiningField name="Gender" importance="4.0"/>
+			<MiningField name="Hours" importance="39.0"/>
+		</MiningSchema>
+		<Segmentation multipleModelMethod="modelChain" x-missingPredictionTreatment="returnMissing">
+			<Segment id="1">
+				<True/>
+				<MiningModel functionName="regression">
+					<MiningSchema>
+						<MiningField name="Age"/>
+						<MiningField name="Education"/>
+						<MiningField name="Marital"/>
+						<MiningField name="Occupation"/>
+						<MiningField name="Income"/>
+						<MiningField name="Gender"/>
+						<MiningField name="Hours"/>
+					</MiningSchema>
+					<Output>
+						<OutputField name="lgbmValue" optype="continuous" dataType="double" isFinalResult="false"/>
+					</Output>
+					<Segmentation multipleModelMethod="sum">
+						<Segment id="1">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Gender"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-1.3089237259697528">
+									<True/>
+									<Node score="-1.2079023876322035">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="-1.2915606834429865">
+											<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+												<Array type="string">Cleaner Farming Machinist Repair Service Transport</Array>
+											</SimpleSetPredicate>
+											<Node score="-1.200887016914318">
+												<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+												<Node score="-1.1826470530478161">
+													<SimplePredicate field="Income" operator="greaterThan" value="27097.545000000002"/>
+													<Node score="-1.0732072698488044">
+														<SimplePredicate field="Age" operator="greaterThan" value="32.50000000000001"/>
+													</Node>
+												</Node>
+											</Node>
+											<Node score="-1.2584130568009781">
+												<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+												<Node score="-1.1756889506623216">
+													<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+												</Node>
+											</Node>
+										</Node>
+										<Node score="-1.0836734445414333">
+											<SimplePredicate field="Age" operator="greaterThan" value="31.500000000000004"/>
+											<Node score="-0.946253873063406">
+												<SimplePredicate field="Hours" operator="greaterThan" value="30.500000000000004"/>
+												<Node score="-0.8626081410194324">
+													<SimplePredicate field="Income" operator="greaterThan" value="56318.030000000006"/>
+												</Node>
+											</Node>
+										</Node>
+										<Node score="-1.0221534752050967">
+											<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+										</Node>
+										<Node score="-1.0866767816271443">
+											<SimplePredicate field="Income" operator="greaterThan" value="54296.495"/>
+										</Node>
+									</Node>
+									<Node score="-1.3089237259697526">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-1.2068715576491673">
+											<SimplePredicate field="Age" operator="greaterThan" value="25.500000000000004"/>
+											<Node score="-1.2811428579269266">
+												<SimplePredicate field="Income" operator="greaterThan" value="123098.33500000002"/>
+											</Node>
+											<Node score="-1.1360649914810572">
+												<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+											</Node>
+										</Node>
+									</Node>
+									<Node score="-1.2493932944494113">
+										<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										<Node score="-1.2816541622467332">
+											<SimplePredicate field="Income" operator="greaterThan" value="47640.350000000006"/>
+											<Node score="-1.252737700714599">
+												<SimplePredicate field="Gender" operator="equal" value="Male"/>
+											</Node>
+										</Node>
+										<Node score="-1.1144576496699703">
+											<SimplePredicate field="Income" operator="greaterThan" value="32239.695000000003"/>
+										</Node>
+									</Node>
+									<Node score="-1.2811428579269266">
+										<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+										<Node score="-1.3032250863712243">
+											<SimplePredicate field="Income" operator="greaterThan" value="92056.15500000001"/>
+										</Node>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="2">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Gender"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.12721854194872104">
+									<True/>
+									<Node score="-0.009795747442300835">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="-0.10900507753156569">
+											<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+												<Array type="string">Cleaner Farming Machinist Repair Service Transport</Array>
+											</SimpleSetPredicate>
+											<Node score="-0.020737349596745433">
+												<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+												<Node score="-0.0040678579701855806">
+													<SimplePredicate field="Income" operator="greaterThan" value="27097.545000000002"/>
+													<Node score="0.08924283979020531">
+														<SimplePredicate field="Age" operator="greaterThan" value="32.50000000000001"/>
+													</Node>
+												</Node>
+											</Node>
+											<Node score="-0.07564739652904925">
+												<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+												<Node score="0.002201667760903984">
+													<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+												</Node>
+											</Node>
+										</Node>
+										<Node score="0.08672699135622587">
+											<SimplePredicate field="Hours" operator="greaterThan" value="37.50000000000001"/>
+											<Node score="0.21893664007902253">
+												<SimplePredicate field="Age" operator="greaterThan" value="36.50000000000001"/>
+												<Node score="0.16416345297927973">
+													<SimplePredicate field="Hours" operator="greaterThan" value="55.50000000000001"/>
+												</Node>
+											</Node>
+											<Node score="0.2744682702593847">
+												<SimplePredicate field="Income" operator="greaterThan" value="61032.00000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.1593765232149602">
+											<SimplePredicate field="Income" operator="greaterThan" value="115648.01000000002"/>
+										</Node>
+									</Node>
+									<Node score="-0.11824458828145804">
+										<SimpleSetPredicate field="Education" booleanOperator="isIn">
+											<Array type="string">Associate Bachelor Doctorate Master Professional Yr12 Yr9</Array>
+										</SimpleSetPredicate>
+										<Node score="0.10889125882697513">
+											<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+											<Node score="-0.08175294494767386">
+												<SimplePredicate field="Income" operator="greaterThan" value="78297.63000000002"/>
+												<Node score="0.005737161999364706">
+													<SimplePredicate field="Income" operator="greaterThan" value="100787.93000000001"/>
+												</Node>
+											</Node>
+											<Node score="0.041557414137923666">
+												<SimplePredicate field="Age" operator="greaterThan" value="48.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.02435967598587753">
+											<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										</Node>
+										<Node score="-0.06696996768151113">
+											<SimplePredicate field="Gender" operator="equal" value="Male"/>
+										</Node>
+									</Node>
+									<Node score="-0.08722339720747406">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.04014794988290701">
+											<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+										<Node score="-0.12952973199863888">
+											<SimplePredicate field="Age" operator="greaterThan" value="29.500000000000004"/>
+										</Node>
+									</Node>
+									<Node score="-0.040951765902601585">
+										<SimplePredicate field="Age" operator="greaterThan" value="57.50000000000001"/>
+										<Node score="-0.12799315348491733">
+											<SimplePredicate field="Income" operator="greaterThan" value="100787.93000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.11487164683167637">
+										<SimplePredicate field="Age" operator="greaterThan" value="34.50000000000001"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="3">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.12396716111120475">
+									<True/>
+									<Node score="-0.0030584566553398026">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="-0.10494590149031678">
+											<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+												<Array type="string">Cleaner Farming Machinist Repair Service Transport</Array>
+											</SimpleSetPredicate>
+											<Node score="-0.018885884470594">
+												<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+												<Node score="-0.0036694371815219912">
+													<SimplePredicate field="Income" operator="greaterThan" value="27097.545000000002"/>
+													<Node score="0.07681171037445716">
+														<SimplePredicate field="Age" operator="greaterThan" value="32.50000000000001"/>
+													</Node>
+												</Node>
+											</Node>
+											<Node score="-0.07125116562087949">
+												<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+												<Node score="0.0019790692801087205">
+													<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+												</Node>
+											</Node>
+										</Node>
+										<Node score="0.14885680596582807">
+											<SimplePredicate field="Age" operator="greaterThan" value="30.500000000000004"/>
+											<Node score="0.06276035120828162">
+												<SimplePredicate field="Age" operator="greaterThan" value="62.50000000000001"/>
+											</Node>
+											<Node score="0.2135804793601234">
+												<SimplePredicate field="Income" operator="greaterThan" value="56318.030000000006"/>
+											</Node>
+										</Node>
+										<Node score="0.10355764589536709">
+											<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.12534810981526803">
+										<SimpleSetPredicate field="Education" booleanOperator="isIn">
+											<Array type="string">Associate Bachelor Doctorate Master Professional Yr12 Yr9</Array>
+										</SimpleSetPredicate>
+										<Node score="-0.07475704003835558">
+											<SimplePredicate field="Age" operator="greaterThan" value="26.500000000000004"/>
+											<Node score="0.09773099768741328">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+												<Node score="0.016461664085195313">
+													<SimplePredicate field="Income" operator="greaterThan" value="89918.32000000002"/>
+												</Node>
+											</Node>
+											<Node score="0.018078272309331966">
+												<SimplePredicate field="Age" operator="greaterThan" value="40.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="-0.08332046400471686">
+											<SimplePredicate field="Income" operator="greaterThan" value="91074.43500000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.08279897870829192">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.03694895310578228">
+											<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+										<Node score="-0.12594301095342372">
+											<SimplePredicate field="Age" operator="greaterThan" value="29.500000000000004"/>
+										</Node>
+									</Node>
+									<Node score="-0.12590414010637335">
+										<SimplePredicate field="Age" operator="greaterThan" value="57.50000000000001"/>
+										<Node score="-0.03821437412704358">
+											<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.11090442874632578">
+										<SimplePredicate field="Age" operator="greaterThan" value="34.50000000000001"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="4">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.1211728882536735">
+									<True/>
+									<Node score="0.08224372923658049">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="-0.08758477413608645">
+											<SimpleSetPredicate field="Education" booleanOperator="isIn">
+												<Array type="string">HSgrad Yr10 Yr11 Yr5t6 Yr7t8 Yr9</Array>
+											</SimpleSetPredicate>
+											<Node score="-0.02583236558019556">
+												<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+													<Array type="string">Clerical Executive Repair</Array>
+												</SimpleSetPredicate>
+												<Node score="0.06066000637775474">
+													<SimplePredicate field="Income" operator="greaterThan" value="29134.335000000003"/>
+													<Node score="0.17256194635216474">
+														<SimplePredicate field="Income" operator="greaterThan" value="59732.77500000001"/>
+													</Node>
+												</Node>
+												<Node score="-0.06810102096334868">
+													<SimplePredicate field="Income" operator="greaterThan" value="23184.980000000003"/>
+												</Node>
+											</Node>
+											<Node score="0.02985856022441015">
+												<SimplePredicate field="Hours" operator="greaterThan" value="53.50000000000001"/>
+											</Node>
+											<Node score="-0.017355406577859805">
+												<SimplePredicate field="Age" operator="greaterThan" value="39.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.02150187966683573">
+											<SimplePredicate field="Hours" operator="greaterThan" value="37.50000000000001"/>
+											<Node score="0.13239931554266704">
+												<SimplePredicate field="Age" operator="greaterThan" value="36.50000000000001"/>
+												<Node score="0.16695194543700587">
+													<SimplePredicate field="Income" operator="greaterThan" value="33632.600000000006"/>
+												</Node>
+											</Node>
+											<Node score="0.14440831031751847">
+												<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.11576308559515594">
+											<SimplePredicate field="Income" operator="greaterThan" value="115648.01000000002"/>
+										</Node>
+										<Node score="-0.1042298534134951">
+											<SimplePredicate field="Income" operator="greaterThan" value="29134.335000000003"/>
+										</Node>
+									</Node>
+									<Node score="-0.12236441372434757">
+										<SimpleSetPredicate field="Education" booleanOperator="isIn">
+											<Array type="string">Associate Bachelor Doctorate Master Professional Yr12 Yr9</Array>
+										</SimpleSetPredicate>
+										<Node score="-0.07497908083396165">
+											<SimplePredicate field="Age" operator="greaterThan" value="26.500000000000004"/>
+											<Node score="0.07716447414997629">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+												<Node score="0.00386075666668954">
+													<SimplePredicate field="Hours" operator="greaterThan" value="55.50000000000001"/>
+												</Node>
+											</Node>
+											<Node score="0.013396328830005317">
+												<SimplePredicate field="Age" operator="greaterThan" value="39.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="-0.07913716559319511">
+											<SimplePredicate field="Income" operator="greaterThan" value="91074.43500000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.07857541003370355">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.033962664141979196">
+											<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+										<Node score="-0.12287374594974099">
+											<SimplePredicate field="Age" operator="greaterThan" value="29.500000000000004"/>
+										</Node>
+									</Node>
+									<Node score="-0.030949429048279648">
+										<SimplePredicate field="Age" operator="greaterThan" value="57.50000000000001"/>
+										<Node score="-0.12287800742829068">
+											<SimplePredicate field="Income" operator="greaterThan" value="100787.93000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.10726804864063806">
+										<SimplePredicate field="Age" operator="greaterThan" value="34.50000000000001"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="5">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.11875672687408821">
+									<True/>
+									<Node score="-0.018771750314516243">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="0.0035781158640940413">
+											<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+												<Array type="string">Cleaner Farming Machinist Repair Service Transport</Array>
+											</SimpleSetPredicate>
+											<Node score="-0.0037740198768272623">
+												<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+												<Node score="0.006010565416119888">
+													<SimplePredicate field="Age" operator="greaterThan" value="35.50000000000001"/>
+													<Node score="0.08002085893768848">
+														<SimplePredicate field="Income" operator="greaterThan" value="46703.295000000006"/>
+													</Node>
+												</Node>
+												<Node score="-0.09131831400894158">
+													<SimplePredicate field="Age" operator="greaterThan" value="31.500000000000004"/>
+												</Node>
+											</Node>
+											<Node score="-0.12412766890604698">
+												<SimplePredicate field="Income" operator="greaterThan" value="31960.595000000005"/>
+											</Node>
+										</Node>
+										<Node score="0.052774207068993585">
+											<SimplePredicate field="Hours" operator="greaterThan" value="37.50000000000001"/>
+											<Node score="0.08001565855687957">
+												<SimplePredicate field="Age" operator="greaterThan" value="36.50000000000001"/>
+												<Node score="0.1380340854754418">
+													<SimplePredicate field="Income" operator="greaterThan" value="13304.090000000002"/>
+												</Node>
+											</Node>
+											<Node score="0.20098088454444885">
+												<SimplePredicate field="Income" operator="greaterThan" value="63392.280000000006"/>
+											</Node>
+										</Node>
+										<Node score="0.09598318669204088">
+											<SimplePredicate field="Income" operator="greaterThan" value="115648.01000000002"/>
+										</Node>
+									</Node>
+									<Node score="-0.11979067877457145">
+										<SimpleSetPredicate field="Education" booleanOperator="isIn">
+											<Array type="string">Associate Bachelor Doctorate Master Professional Yr12 Yr9</Array>
+										</SimpleSetPredicate>
+										<Node score="-0.016535655634878795">
+											<SimplePredicate field="Age" operator="greaterThan" value="26.500000000000004"/>
+											<Node score="-0.07136208040405617">
+												<SimplePredicate field="Income" operator="greaterThan" value="140012.44500000004"/>
+											</Node>
+											<Node score="0.07598547352700336">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="-0.07511589192999617">
+											<SimplePredicate field="Income" operator="greaterThan" value="91074.43500000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.0745192664521487">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.031178468687422176">
+											<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+										<Node score="-0.12022954363426755">
+											<SimplePredicate field="Age" operator="greaterThan" value="29.500000000000004"/>
+										</Node>
+									</Node>
+									<Node score="-0.12139338781701728">
+										<SimplePredicate field="Age" operator="greaterThan" value="57.50000000000001"/>
+										<Node score="-0.02872553320838054">
+											<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.10388946782091085">
+										<SimplePredicate field="Age" operator="greaterThan" value="34.50000000000001"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="6">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Gender"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.1167594877550823">
+									<True/>
+									<Node score="-0.05636222926441578">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="-0.08358130219386073">
+											<SimpleSetPredicate field="Education" booleanOperator="isIn">
+												<Array type="string">HSgrad Yr10 Yr11 Yr5t6 Yr7t8 Yr9</Array>
+											</SimpleSetPredicate>
+											<Node score="-0.027000755443630627">
+												<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+													<Array type="string">Clerical Executive Repair</Array>
+												</SimpleSetPredicate>
+												<Node score="0.047496200266515826">
+													<SimplePredicate field="Income" operator="greaterThan" value="29134.335000000003"/>
+													<Node score="0.13518787556505582">
+														<SimplePredicate field="Income" operator="greaterThan" value="59732.77500000001"/>
+													</Node>
+												</Node>
+												<Node score="-0.06814610120620472">
+													<SimplePredicate field="Income" operator="greaterThan" value="23184.980000000003"/>
+												</Node>
+											</Node>
+											<Node score="0.022662579920698728">
+												<SimplePredicate field="Hours" operator="greaterThan" value="53.50000000000001"/>
+											</Node>
+											<Node score="-0.018745826510871862">
+												<SimplePredicate field="Age" operator="greaterThan" value="39.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.12414299870321271">
+											<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+											<Node score="0.057742169493545416">
+												<SimplePredicate field="Income" operator="greaterThan" value="21538.500000000004"/>
+												<Node score="0.11234188360459788">
+													<SimplePredicate field="Income" operator="greaterThan" value="33632.600000000006"/>
+												</Node>
+											</Node>
+											<Node score="0.22375142384878616">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="0.07007450331928994">
+											<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.049448301042826825">
+										<SimplePredicate field="Age" operator="greaterThan" value="38.50000000000001"/>
+										<Node score="-0.0510162133805105">
+											<SimplePredicate field="Income" operator="greaterThan" value="48830.025"/>
+											<Node score="0.02574064231818443">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+												<Node score="-0.027564211854932297">
+													<SimplePredicate field="Income" operator="greaterThan" value="92056.15500000001"/>
+												</Node>
+											</Node>
+											<Node score="-0.08655007578843688">
+												<SimplePredicate field="Gender" operator="equal" value="Female"/>
+											</Node>
+										</Node>
+										<Node score="0.09489073227013958">
+											<SimplePredicate field="Income" operator="greaterThan" value="33897.615000000005"/>
+										</Node>
+									</Node>
+									<Node score="-0.11960686345134418">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.05916764405161156">
+											<SimplePredicate field="Age" operator="greaterThan" value="25.500000000000004"/>
+											<Node score="0.029954545958362222">
+												<SimplePredicate field="Income" operator="greaterThan" value="88121.21"/>
+											</Node>
+										</Node>
+									</Node>
+									<Node score="-0.07940429152283772">
+										<SimplePredicate field="Hours" operator="greaterThan" value="38.50000000000001"/>
+										<Node score="-0.10934441939423663">
+											<SimplePredicate field="Income" operator="greaterThan" value="92056.15500000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.11775521743126985">
+										<SimplePredicate field="Age" operator="greaterThan" value="27.500000000000004"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+						<Segment id="7">
+							<True/>
+							<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+								<MiningSchema>
+									<MiningField name="Age"/>
+									<MiningField name="Education"/>
+									<MiningField name="Marital"/>
+									<MiningField name="Occupation"/>
+									<MiningField name="Income"/>
+									<MiningField name="Gender"/>
+									<MiningField name="Hours"/>
+								</MiningSchema>
+								<Node score="-0.11497896294042619">
+									<True/>
+									<Node score="-0.10507751356372658">
+										<SimplePredicate field="Marital" operator="equal" value="Married"/>
+										<Node score="0.019476524565938756">
+											<SimpleSetPredicate field="Occupation" booleanOperator="isIn">
+												<Array type="string">Clerical Executive Professional Protective Support</Array>
+											</SimpleSetPredicate>
+											<Node score="0.051126507979450786">
+												<SimplePredicate field="Hours" operator="greaterThan" value="26.500000000000004"/>
+												<Node score="0.09153738107652587">
+													<SimplePredicate field="Age" operator="greaterThan" value="36.50000000000001"/>
+													<Node score="0.1280433148748171">
+														<SimplePredicate field="Income" operator="greaterThan" value="30167.705000000005"/>
+													</Node>
+												</Node>
+												<Node score="0.15497372494283934">
+													<SimplePredicate field="Income" operator="greaterThan" value="63392.280000000006"/>
+												</Node>
+											</Node>
+										</Node>
+										<Node score="0.04833715880280691">
+											<SimplePredicate field="Hours" operator="greaterThan" value="41.50000000000001"/>
+											<Node score="0.0774601348297313">
+												<SimplePredicate field="Age" operator="greaterThan" value="35.50000000000001"/>
+												<Node score="0.014053772183481882">
+													<SimplePredicate field="Age" operator="greaterThan" value="49.50000000000001"/>
+												</Node>
+											</Node>
+											<Node score="-0.024145372950755223">
+												<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+											</Node>
+										</Node>
+										<Node score="0.06359154811219336">
+											<SimplePredicate field="Age" operator="greaterThan" value="28.500000000000004"/>
+											<Node score="-0.02084028158348026">
+												<SimplePredicate field="Age" operator="greaterThan" value="31.500000000000004"/>
+											</Node>
+										</Node>
+									</Node>
+									<Node score="-0.1159292828723612">
+										<SimpleSetPredicate field="Education" booleanOperator="isIn">
+											<Array type="string">Associate Bachelor Doctorate Master Professional Yr12 Yr9</Array>
+										</SimpleSetPredicate>
+										<Node score="-0.009233257479465731">
+											<SimplePredicate field="Age" operator="greaterThan" value="26.500000000000004"/>
+											<Node score="-0.06319949194343542">
+												<SimplePredicate field="Income" operator="greaterThan" value="140012.44500000004"/>
+											</Node>
+											<Node score="0.06763311612822803">
+												<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+											</Node>
+										</Node>
+										<Node score="-0.0653338880868491">
+											<SimplePredicate field="Income" operator="greaterThan" value="91074.43500000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.07761220535124268">
+										<SimplePredicate field="Hours" operator="greaterThan" value="48.50000000000001"/>
+										<Node score="-0.12182993552917035">
+											<SimplePredicate field="Gender" operator="equal" value="Female"/>
+										</Node>
+										<Node score="-0.01291072091549349">
+											<SimplePredicate field="Age" operator="greaterThan" value="36.50000000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.016272798145640685">
+										<SimplePredicate field="Age" operator="greaterThan" value="57.50000000000001"/>
+										<Node score="-0.11763953568533479">
+											<SimplePredicate field="Income" operator="greaterThan" value="100787.93000000001"/>
+										</Node>
+									</Node>
+									<Node score="-0.09866832540547381">
+										<SimplePredicate field="Age" operator="greaterThan" value="34.50000000000001"/>
+									</Node>
+								</Node>
+							</TreeModel>
+						</Segment>
+					</Segmentation>
+				</MiningModel>
+			</Segment>
+			<Segment id="2">
+				<True/>
+				<RegressionModel functionName="classification" normalizationMethod="logit">
+					<MiningSchema>
+						<MiningField name="Adjusted" usageType="target"/>
+						<MiningField name="lgbmValue"/>
+					</MiningSchema>
+					<Output>
+						<OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
+						<OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
+					</Output>
+					<RegressionTable intercept="0.0" targetCategory="1">
+						<NumericPredictor name="lgbmValue" coefficient="1.0"/>
+					</RegressionTable>
+					<RegressionTable intercept="0.0" targetCategory="0"/>
+				</RegressionModel>
+			</Segment>
+		</Segmentation>
+	</MiningModel>
+</PMML>

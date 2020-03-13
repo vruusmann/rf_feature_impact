@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_3" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+	<Header>
+		<Application name="JPMML-SkLearn" version="1.5.32"/>
+		<Timestamp>2020-03-13T15:24:58Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="mpg" optype="continuous" dataType="double"/>
+		<DataField name="cylinders" optype="continuous" dataType="double"/>
+		<DataField name="displacement" optype="continuous" dataType="double"/>
+		<DataField name="horsepower" optype="continuous" dataType="double"/>
+		<DataField name="weight" optype="continuous" dataType="double"/>
+		<DataField name="model_year" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<MiningModel functionName="regression" algorithmName="LightGBM">
+		<MiningSchema>
+			<MiningField name="mpg" usageType="target"/>
+			<MiningField name="cylinders" importance="2.0"/>
+			<MiningField name="displacement" importance="3.0"/>
+			<MiningField name="horsepower" importance="5.0"/>
+			<MiningField name="weight" importance="6.0"/>
+			<MiningField name="model_year" importance="19.0"/>
+		</MiningSchema>
+		<Segmentation multipleModelMethod="sum">
+			<Segment id="1">
+				<True/>
+				<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+					<MiningSchema>
+						<MiningField name="cylinders"/>
+						<MiningField name="horsepower"/>
+						<MiningField name="model_year"/>
+					</MiningSchema>
+					<Node score="24.076326526564603">
+						<True/>
+						<Node score="22.94119494257997">
+							<SimplePredicate field="cylinders" operator="greaterThan" value="5.500000000000001"/>
+							<Node score="22.459659880780848">
+								<SimplePredicate field="horsepower" operator="greaterThan" value="139.50000000000003"/>
+								<Node score="22.706326519632015">
+									<SimplePredicate field="model_year" operator="greaterThan" value="74.50000000000001"/>
+								</Node>
+							</Node>
+							<Node score="23.410941920640585">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="23.56365210371535">
+							<SimplePredicate field="horsepower" operator="greaterThan" value="70.50000000000001"/>
+							<Node score="24.12969388444813">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="24.72295440419002">
+							<SimplePredicate field="model_year" operator="greaterThan" value="77.50000000000001"/>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="2">
+				<True/>
+				<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+					<MiningSchema>
+						<MiningField name="displacement"/>
+						<MiningField name="horsepower"/>
+						<MiningField name="model_year"/>
+					</MiningSchema>
+					<Node score="0.36216349468586295">
+						<True/>
+						<Node score="-0.509271015181686">
+							<SimplePredicate field="displacement" operator="greaterThan" value="198.50000000000003"/>
+							<Node score="-0.8704672982818202">
+								<SimplePredicate field="horsepower" operator="greaterThan" value="127.00000000000001"/>
+								<Node score="-0.5717479729652405">
+									<SimplePredicate field="model_year" operator="greaterThan" value="76.50000000000001"/>
+								</Node>
+							</Node>
+							<Node score="-0.24721543098750867">
+								<SimplePredicate field="model_year" operator="greaterThan" value="75.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="-0.06886970869293718">
+							<SimplePredicate field="horsepower" operator="greaterThan" value="84.50000000000001"/>
+							<Node score="0.4432604806317437">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="0.9576943964134028">
+							<SimplePredicate field="model_year" operator="greaterThan" value="76.50000000000001"/>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="3">
+				<True/>
+				<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+					<MiningSchema>
+						<MiningField name="cylinders"/>
+						<MiningField name="weight"/>
+						<MiningField name="model_year"/>
+					</MiningSchema>
+					<Node score="0.46709926487149106">
+						<True/>
+						<Node score="-0.4045653117941572">
+							<SimplePredicate field="cylinders" operator="greaterThan" value="5.500000000000001"/>
+							<Node score="-0.8457954779915188">
+								<SimplePredicate field="weight" operator="greaterThan" value="3727.5000000000005"/>
+								<Node score="-0.6223467458675548">
+									<SimplePredicate field="model_year" operator="greaterThan" value="73.50000000000001"/>
+								</Node>
+							</Node>
+							<Node score="0.04765596227212386">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="0.025530477582591856">
+							<SimplePredicate field="weight" operator="greaterThan" value="2212.5000000000005"/>
+							<Node score="0.5330839769542218">
+								<SimplePredicate field="model_year" operator="greaterThan" value="79.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="1.0606863194323601">
+							<SimplePredicate field="model_year" operator="greaterThan" value="77.50000000000001"/>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="4">
+				<True/>
+				<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+					<MiningSchema>
+						<MiningField name="displacement"/>
+						<MiningField name="weight"/>
+						<MiningField name="model_year"/>
+					</MiningSchema>
+					<Node score="0.5417927388487191">
+						<True/>
+						<Node score="-0.31058446337195006">
+							<SimplePredicate field="weight" operator="greaterThan" value="2742.5000000000005"/>
+							<Node score="-0.7106823890240161">
+								<SimplePredicate field="displacement" operator="greaterThan" value="284.50000000000006"/>
+								<Node score="-0.40062656430971055">
+									<SimplePredicate field="model_year" operator="greaterThan" value="76.50000000000001"/>
+								</Node>
+							</Node>
+							<Node score="0.20211907640099525">
+								<SimplePredicate field="model_year" operator="greaterThan" value="79.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="0.9281746993985092">
+							<SimplePredicate field="model_year" operator="greaterThan" value="77.50000000000001"/>
+							<Node score="0.3789128363132477">
+								<SimplePredicate field="weight" operator="greaterThan" value="2373.5000000000005"/>
+							</Node>
+						</Node>
+						<Node score="0.06244185835123062">
+							<SimplePredicate field="weight" operator="greaterThan" value="2080.0000000000005"/>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+			<Segment id="5">
+				<True/>
+				<TreeModel functionName="regression" noTrueChildStrategy="returnLastPrediction">
+					<MiningSchema>
+						<MiningField name="displacement"/>
+						<MiningField name="horsepower"/>
+						<MiningField name="weight"/>
+						<MiningField name="model_year"/>
+					</MiningSchema>
+					<Node score="0.42634025482194765">
+						<True/>
+						<Node score="-0.30258094696751375">
+							<SimplePredicate field="displacement" operator="greaterThan" value="153.00000000000003"/>
+							<Node score="-0.6839954436994067">
+								<SimplePredicate field="weight" operator="greaterThan" value="3607.0000000000005"/>
+								<Node score="-0.4706436626765193">
+									<SimplePredicate field="model_year" operator="greaterThan" value="73.50000000000001"/>
+								</Node>
+							</Node>
+							<Node score="0.0349070970307697">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="0.07101833548648608">
+							<SimplePredicate field="horsepower" operator="greaterThan" value="70.50000000000001"/>
+							<Node score="0.46456987502727104">
+								<SimplePredicate field="model_year" operator="greaterThan" value="78.50000000000001"/>
+							</Node>
+						</Node>
+						<Node score="0.8666931371356166">
+							<SimplePredicate field="model_year" operator="greaterThan" value="77.50000000000001"/>
+						</Node>
+					</Node>
+				</TreeModel>
+			</Segment>
+		</Segmentation>
+	</MiningModel>
+</PMML>
