@@ -135,8 +135,12 @@ public class Main {
 
 			MultipleModelMethod multipleModelMethod = segmentation.getMultipleModelMethod();
 			switch(multipleModelMethod){
+				case SUM:
+				case WEIGHTED_SUM:
 				case AVERAGE:
 				case WEIGHTED_AVERAGE:
+				case MEDIAN:
+				case WEIGHTED_MEDIAN:
 					break;
 				default:
 					throw new UnsupportedElementException(miningModel);
