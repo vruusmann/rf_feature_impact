@@ -206,7 +206,7 @@ public class Main {
 			List<String> bodyRow = outputTable.get(i);
 
 			while(bodyRow.size() < headerRow.size()){
-				bodyRow.add(String.valueOf(null));
+				bodyRow.add(String.valueOf((Object)null));
 			}
 		}
 
