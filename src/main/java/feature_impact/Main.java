@@ -26,6 +26,7 @@ import org.dmg.pmml.Predicate;
 import org.dmg.pmml.ScoreDistribution;
 import org.dmg.pmml.adapters.NodeAdapter;
 import org.dmg.pmml.mining.MiningModel;
+import org.dmg.pmml.mining.Segment;
 import org.dmg.pmml.mining.Segmentation;
 import org.dmg.pmml.mining.Segmentation.MultipleModelMethod;
 import org.dmg.pmml.tree.ComplexNode;
@@ -126,6 +127,11 @@ public class Main {
 	private void run() throws Exception {
 		ModelEvaluator<?> evaluator = loadModelEvaluator(this.modelFile);
 
+		// Supervised learning models are expected to have exactly one target field (aka label)
+		TargetField targetField = Iterables.getOnlyElement(evaluator.getTargetFields());
+
+		MiningModel targetClassModel = null;
+
 		Model model = evaluator.getModel();
 
 		if(model instanceof MiningModel){
@@ -135,6 +141,38 @@ public class Main {
 
 			MultipleModelMethod multipleModelMethod = segmentation.getMultipleModelMethod();
 			switch(multipleModelMethod){
+				case MODEL_CHAIN:
+					{
+						List<Segment> segments = segmentation.getSegments();
+
+						List<?> targetClasses = targetField.getCategories();
+
+						int targetClassIndex = targetClasses.indexOf(this.targetClass);
+						if(targetClassIndex < 0){
+							throw new IllegalArgumentException("Cannot find target class " + this.targetClass + " in " + targetClasses);
+						}
+
+						int modelChainIndex;
+
+						// A binary classification model
+						if(targetClasses.size() == 2 && segments.size() == 2){
+							modelChainIndex = 0;
+						} else
+
+						// A multi-class classification model
+						if(targetClasses.size() >= 3 && (segments.size() == targetClasses.size() + 1)){
+							modelChainIndex = targetClassIndex;
+						} else
+
+						{
+							throw new UnsupportedElementException(segmentation);
+						}
+
+						Segment segment = segments.get(modelChainIndex);
+
+						targetClassModel = (MiningModel)segment.getModel();
+					}
+					break;
 				case SUM:
 				case WEIGHTED_SUM:
 				case AVERAGE:
@@ -154,9 +192,6 @@ public class Main {
 		{
 			throw new UnsupportedElementException(model);
 		}
-
-		// Supervised learning models are expected to have exactly one target field (aka label)
-		TargetField targetField = Iterables.getOnlyElement(evaluator.getTargetFields());
 
 		Table inputTable;
 
@@ -198,7 +233,7 @@ public class Main {
 			Object targetValue = results.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			computeExplanation(String.valueOf(row), targetValue, this.targetClass, this.aggregate, outputTable);
+			computeExplanation(String.valueOf(row), targetValue, targetClassModel, this.targetClass, this.aggregate, outputTable);
 		}
 
 		List<String> headerRow = outputTable.getHeader();
@@ -216,8 +251,18 @@ public class Main {
 	}
 
 	static
-	private void computeExplanation(String id, Object targetValue, String targetClass, boolean aggregate, Table outputTable){
+	private void computeExplanation(String id, Object targetValue, MiningModel targetClassModel, String targetClass, boolean aggregate, Table outputTable){
 		List<Contribution> contributions = new ArrayList<>();
+
+		if(targetClassModel != null){
+			Object targetClassValue = ExtendedMiningModelEvaluator.RESULTS.get(targetClassModel);
+
+			if(targetClassModel == null){
+				throw new RuntimeException();
+			}
+
+			targetValue = targetClassValue;
+		}
 
 		int size = 1;
 
@@ -395,6 +440,7 @@ public class Main {
 			.setVisitors(visitors)
 			//.setOutputFilter(OutputFilters.KEEP_FINAL_RESULTS)
 			.load(pmmlFile)
+			.setModelEvaluatorFactory(new ExtendedModelEvaluatorFactory())
 			.build();
 
 		// Unset for the current thread
