@@ -1,10 +1,12 @@
 package feature_impact;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import feature_impact.visitors.ScoreDistributionGenerator;
 import org.dmg.pmml.FieldName;
@@ -44,6 +48,7 @@ import org.jpmml.evaluator.mining.SegmentResult;
 import org.jpmml.evaluator.tree.HasDecisionPath;
 import org.jpmml.evaluator.visitors.DefaultVisitorBattery;
 import org.jpmml.model.VisitorBattery;
+import org.jpmml.model.visitors.FieldReferenceFinder;
 
 public class Main {
 
@@ -193,30 +198,54 @@ public class Main {
 			throw new UnsupportedElementException(model);
 		}
 
-		Table inputTable;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.inputFile), "UTF-8"));
 
-		try(InputStream is = new FileInputStream(this.inputFile)){
-			inputTable = CsvUtil.readTable(is, Main.CSV_SEPARATOR);
-		}
+		Splitter splitter = Splitter.on(Main.CSV_SEPARATOR);
 
 		// The first line of the CSV input file is field names
-		List<FieldName> inputFields = inputTable.remove(0).stream()
+		String inputHeaderRow = reader.readLine();
+
+		List<FieldName> inputFields = (splitter.splitToList(inputHeaderRow)).stream()
 			.map(string -> FieldName.create(string))
 			.collect(Collectors.toList());
 
-		Table outputTable = new Table();
-		outputTable.setSeparator(Main.CSV_SEPARATOR);
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFile), "UTF-8"));
+
+		Joiner joiner = Joiner.on(Main.CSV_SEPARATOR);
+
+		List<FieldName> aggregateColumns = null;
 
 		if(this.aggregate){
-			outputTable.setHeader(Arrays.asList(Contribution.TRUE.getValue()));
+			Set<FieldName> names = new LinkedHashSet<>();
+			names.add(Contribution.TRUE);
+
+			FieldReferenceFinder fieldReferenceFinder = new FieldReferenceFinder();
+			fieldReferenceFinder.applyTo(model);
+
+			names.addAll(fieldReferenceFinder.getFieldNames());
+
+			aggregateColumns = new ArrayList<>(names);
+
+			List<String> columnNames = aggregateColumns.stream()
+				.map(name -> name.getValue())
+				.collect(Collectors.toList());
+
+			writer.write(joiner.join(columnNames) + "\n");
 		} else
 
 		{
-			outputTable.setHeader(Arrays.asList("Id", "Segment", "Weight", "Depth", "Field", "Impact"));
+			List<String> columnNames = Arrays.asList("Id", "Segment", "Weight", "Depth", "Field", "Impact");
+
+			writer.write(joiner.join(columnNames) + "\n");
 		}
 
-		for(int row = 0; row < inputTable.size(); row++){
-			List<String> content = inputTable.get(row);
+		for(int row = 0; true; row++){
+			String contentRow = reader.readLine();
+			if(contentRow == null){
+				break;
+			}
+
+			List<String> content = splitter.splitToList(contentRow);
 
 			Map<FieldName, Object> arguments = new LinkedHashMap<>();
 
@@ -233,25 +262,19 @@ public class Main {
 			Object targetValue = results.get(targetField.getName());
 			//System.out.println(targetValue);
 
-			computeExplanation(String.valueOf(row), targetValue, targetClassModel, this.targetClass, this.aggregate, outputTable);
-		}
-
-		List<String> headerRow = outputTable.getHeader();
-		for(int i = 1; i < outputTable.size(); i++){
-			List<String> bodyRow = outputTable.get(i);
-
-			while(bodyRow.size() < headerRow.size()){
-				bodyRow.add(String.valueOf((Object)null));
+			List<List<String>> resultRows = computeExplanation(String.valueOf(row), targetValue, targetClassModel, this.targetClass, this.aggregate, aggregateColumns);
+			for(List<String> resultRow : resultRows){
+				writer.write(joiner.join(resultRow) + "\n");
 			}
 		}
 
-		try(OutputStream os = new FileOutputStream(this.outputFile)){
-			CsvUtil.writeTable(outputTable, os);
-		}
+		reader.close();
+
+		writer.close();
 	}
 
 	static
-	private void computeExplanation(String id, Object targetValue, MiningModel targetClassModel, String targetClass, boolean aggregate, Table outputTable){
+	private List<List<String>> computeExplanation(String id, Object targetValue, MiningModel targetClassModel, String targetClass, boolean aggregate, List<FieldName> fieldNames){
 		List<Contribution> contributions = new ArrayList<>();
 
 		if(targetClassModel != null){
@@ -289,24 +312,11 @@ public class Main {
 			contributions.addAll(computeFeatureContributions(null, 1.0d, targetValue, targetClass));
 		} // End if
 
+		List<List<String>> result = new ArrayList<>();
+
 		if(aggregate){
 			Map<FieldName, Double> aggregateImpacts = contributions.stream()
 				.collect(Collectors.groupingBy(Contribution::getField, Collectors.mapping(Contribution::getImpact, Collectors.summingDouble(Number::doubleValue))));
-
-			List<String> header = outputTable.getHeader();
-
-			Set<FieldName> fieldNames = header.stream()
-				.map(FieldName::create)
-				.collect(Collectors.toCollection( LinkedHashSet::new));
-
-			boolean changed = fieldNames.addAll(aggregateImpacts.keySet());
-			if(changed){
-				header = fieldNames.stream()
-					.map(FieldName::getValue)
-					.collect(Collectors.toList());
-
-				outputTable.setHeader(header);
-			}
 
 			List<String> row = new ArrayList<>();
 
@@ -320,7 +330,7 @@ public class Main {
 				row.add(String.valueOf(aggregateImpact));
 			}
 
-			outputTable.add(row);
+			result.add(row);
 		} else
 
 		{
@@ -329,9 +339,11 @@ public class Main {
 					.map(object -> String.valueOf(object))
 					.collect(Collectors.toList());
 
-				outputTable.add(row);
+				result.add(row);
 			}
 		}
+
+		return result;
 	}
 
 	static
