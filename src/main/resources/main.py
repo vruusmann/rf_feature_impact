@@ -24,7 +24,7 @@ def lightgbm_audit():
 	mapper, categorical_feature = make_lightgbm_dataframe_mapper(audit_X.dtypes, missing_value_aware = False)
 	pipeline = PMMLPipeline([
 		("mapper", mapper),
-		("classifier", LGBMClassifier(n_estimators = 7, max_depth = 5, random_state = 13))
+		("classifier", LGBMClassifier(n_estimators = 71, max_depth = 7, random_state = 13))
 	])
 	pipeline.fit(audit_X, audit_y, classifier__categorical_feature = categorical_feature)
 	pipeline.configure(compact = True)
@@ -45,7 +45,7 @@ def sklearn_audit(classifier, name):
 	sklearn2pmml(pipeline, "pmml/" + name + ".pmml", with_repr = False)
 
 sklearn_audit(DecisionTreeClassifier(max_depth = 8, random_state = 13), "DecisionTreeAudit")
-sklearn_audit(RandomForestClassifier(n_estimators = 7, max_depth = 5, random_state = 13), "RandomForestAudit")
+sklearn_audit(RandomForestClassifier(n_estimators = 71, max_depth = 7, random_state = 13), "RandomForestAudit")
 
 auto = pandas.read_csv("csv/Auto.csv")
 print(auto.head(3))
@@ -59,7 +59,7 @@ def lightgbm_auto():
 	mapper, categorical_feature = make_lightgbm_dataframe_mapper(auto_X.dtypes, missing_value_aware = False)
 	pipeline = PMMLPipeline([
 		("mapper", mapper),
-		("regressor", LGBMRegressor(n_estimators = 5, max_depth = 3, random_state = 13))
+		("regressor", LGBMRegressor(n_estimators = 31, max_depth = 5, random_state = 13))
 	])
 	pipeline.fit(auto_X, auto_y, regressor__categorical_feature = categorical_feature)
 	pipeline.configure(compact = True)
@@ -80,4 +80,4 @@ def sklearn_auto(regressor, name):
 	sklearn2pmml(pipeline, "pmml/" + name + ".pmml", with_repr = False)
 
 sklearn_auto(DecisionTreeRegressor(max_depth = 6, random_state = 13), "DecisionTreeAuto")
-sklearn_auto(RandomForestRegressor(n_estimators = 5, max_depth = 3, random_state = 13), "RandomForestAuto")
+sklearn_auto(RandomForestRegressor(n_estimators = 31, max_depth = 5, random_state = 13), "RandomForestAuto")
