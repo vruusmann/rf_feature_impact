@@ -253,7 +253,15 @@ public class Main {
 				arguments.put(inputFields.get(column), content.get(column));
 			}
 
-			Map<FieldName, ?> results = evaluator.evaluate(arguments);
+			Map<FieldName, ?> results;
+
+			try {
+				results = evaluator.evaluate(arguments);
+			} catch(Exception e){
+				System.err.println("Failed to evaluate row " + (row) + " (" + arguments + ")");
+
+				throw e;
+			}
 
 			// The target value is a subclass of org.jpmml.evaluator.Computable,
 			// and may expose different aspects of the prediction process by implementing org.jpmml.evaluator.ResultFeature subinterfaces.
