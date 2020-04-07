@@ -36,12 +36,17 @@ import org.dmg.pmml.mining.Segmentation.MultipleModelMethod;
 import org.dmg.pmml.tree.ComplexNode;
 import org.dmg.pmml.tree.Node;
 import org.dmg.pmml.tree.NodeTransformer;
+import org.dmg.pmml.tree.PMMLAttributes;
+import org.dmg.pmml.tree.PMMLElements;
 import org.dmg.pmml.tree.TreeModel;
 import org.jpmml.evaluator.Classification;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
+import org.jpmml.evaluator.MissingAttributeException;
+import org.jpmml.evaluator.MissingElementException;
 import org.jpmml.evaluator.ModelEvaluator;
 import org.jpmml.evaluator.Regression;
 import org.jpmml.evaluator.TargetField;
+import org.jpmml.evaluator.UnsupportedAttributeException;
 import org.jpmml.evaluator.UnsupportedElementException;
 import org.jpmml.evaluator.mining.HasSegmentation;
 import org.jpmml.evaluator.mining.SegmentResult;
@@ -186,7 +191,7 @@ public class Main {
 				case WEIGHTED_MEDIAN:
 					break;
 				default:
-					throw new UnsupportedElementException(miningModel);
+					throw new UnsupportedAttributeException(segmentation, multipleModelMethod);
 			}
 		} else
 
@@ -373,7 +378,7 @@ public class Main {
 			if(targetValue instanceof Classification){
 
 				if(!node.hasScoreDistributions()){
-					throw new UnsupportedElementException(node);
+					throw new MissingElementException(node, PMMLElements.COMPLEXNODE_SCOREDISTRIBUTIONS);
 				}
 
 				Number recordCount = node.getRecordCount();
@@ -392,7 +397,7 @@ public class Main {
 			if(targetValue instanceof Regression){
 
 				if(!node.hasScore()){
-					throw new UnsupportedElementException(node);
+					throw new MissingAttributeException(node, PMMLAttributes.COMPLEXNODE_SCORE);
 				}
 
 				Number score = (Number)node.getScore();
