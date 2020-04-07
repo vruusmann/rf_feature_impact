@@ -31,38 +31,56 @@ The project should be now visible as `rf_feature_impact` under "Project explorer
 
 # Usage #
 
-The resources folder [`src/main/resources`](https://github.com/vruusmann/rf_feature_impact/tree/master/src/main/resources) contains two LightGBM and two Scikit-Learn random forest examples.
+The resources folder [`src/main/resources`](https://github.com/vruusmann/rf_feature_impact/tree/master/src/main/resources) contains LightGBM, XGBoost and Scikit-Learn examples.
 
-Scoring the LightGBM classification example:
+Getting help:
+
+```
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --help
+```
+
+### Binary classification
+
+Scoring the LightGBM example:
 
 ```
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/LightGBMAudit.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-impact.csv
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/LightGBMAudit.pmml --target-class 1 --aggregate true --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-aggregate_impact.csv
 ```
 
-Scoring the Scikit-Learn random forest classification example:
+Scoring the XGBoost example:
+
+```
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/XGBoostAudit.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-impact.csv
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/XGBoostAudit.pmml --target-class 1 --aggregate true --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-aggregate_impact.csv
+```
+
+Scoring the Scikit-Learn random forest example:
 
 ```
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAudit.pmml --target-class 0 --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-impact.csv
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAudit.pmml --target-class 1 --aggregate true --csv-input src/main/resources/csv/Audit.csv --csv-output Audit-aggregate_impact.csv
 ```
 
-Scoring the LightGBM regression example:
+### Regression
+
+Scoring the LightGBM example:
 
 ```
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/LightGBMAuto.pmml --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-impact.csv
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/LightGBMAuto.pmml --aggregate true --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-aggregate_impact.csv
 ```
 
-Scoring the Scikit-Learn regression example:
+Scoring the XGBoost example:
+
+```
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/XGBoostAuto.pmml --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-impact.csv
+$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/XGBoostAuto.pmml --aggregate true --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-aggregate_impact.csv
+```
+
+Scoring the Scikit-Learn example:
 
 ```
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAuto.pmml --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-impact.csv
 $ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --pmml-model src/main/resources/pmml/RandomForestAuto.pmml --aggregate true --csv-input src/main/resources/csv/Auto.csv --csv-output Auto-aggregate_impact.csv
-```
-
-Getting help:
-
-```
-$ java -jar target/feature_impact-executable-1.0-SNAPSHOT.jar --help
 ```

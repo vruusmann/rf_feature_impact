@@ -7,6 +7,8 @@ from sklearn2pmml import sklearn2pmml
 from sklearn2pmml.decoration import CategoricalDomain, ContinuousDomain
 from sklearn2pmml.pipeline import PMMLPipeline
 from sklearn2pmml.preprocessing.lightgbm import make_lightgbm_dataframe_mapper
+from sklearn2pmml.preprocessing.xgboost import make_xgboost_dataframe_mapper
+from xgboost.sklearn import XGBClassifier, XGBRegressor
 
 import pandas
 
@@ -47,6 +49,18 @@ def sklearn_audit(classifier, name):
 sklearn_audit(DecisionTreeClassifier(max_depth = 8, random_state = 13), "DecisionTreeAudit")
 sklearn_audit(RandomForestClassifier(n_estimators = 71, max_depth = 7, random_state = 13), "RandomForestAudit")
 
+def xgboost_audit():
+	mapper = make_xgboost_dataframe_mapper(audit_X.dtypes, missing_value_aware = False)
+	pipeline = PMMLPipeline([
+		("mapper", mapper),
+		("classifier", XGBClassifier(n_estimators = 71, max_depth = 5, random_state = 13))
+	])
+	pipeline.fit(audit_X, audit_y)
+	pipeline.configure(compact = True)
+	sklearn2pmml(pipeline, "pmml/XGBoostAudit.pmml", with_repr = True)
+
+xgboost_audit()
+
 auto = pandas.read_csv("csv/Auto.csv")
 print(auto.head(3))
 
@@ -81,3 +95,15 @@ def sklearn_auto(regressor, name):
 
 sklearn_auto(DecisionTreeRegressor(max_depth = 6, random_state = 13), "DecisionTreeAuto")
 sklearn_auto(RandomForestRegressor(n_estimators = 31, max_depth = 5, random_state = 13), "RandomForestAuto")
+
+def xgboost_auto():
+	mapper = make_xgboost_dataframe_mapper(auto_X.dtypes, missing_value_aware = False)
+	pipeline = PMMLPipeline([
+		("mapper", mapper),
+		("regressor", XGBRegressor(n_estimators = 31, max_depth = 3, random_state = 13))
+	])
+	pipeline.fit(auto_X, auto_y)
+	pipeline.configure(compact = False)
+	sklearn2pmml(pipeline, "pmml/XGBoostAuto.pmml", with_repr = True)
+
+xgboost_auto()
